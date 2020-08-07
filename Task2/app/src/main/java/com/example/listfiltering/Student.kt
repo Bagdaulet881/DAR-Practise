@@ -1,16 +1,16 @@
 package com.example.listfiltering
 
-data class Student(val name:String, val lastname:String, val email:String, val age:String,
-              val city:String, val university:String, val hobby:String, val dream:String) {
+data class Student(val id:Int,val name:String, val surname:String, val email:String, val age:Int,
+              val city:String, val univer:String, val hobby:String, val dream:String) {
 
     override fun toString(): String {
-        return "Student(name='$name', lastname='$lastname', email='$email', age=$age, city='$city', university='$university', hobby='$hobby', dream='$dream')"
+        return "Student(name='$name', lastname='$surname', email='$email', age=$age, city='$city', university='$univer', hobby='$hobby', dream='$dream')"
     }
 
     fun sorting(keyWord: String): Boolean{
         if(this.city.equals(keyWord)){
             return true
-        }else if(this.university.equals(keyWord)){
+        }else if(this.univer.equals(keyWord)){
                 return true
             }else
                 return false

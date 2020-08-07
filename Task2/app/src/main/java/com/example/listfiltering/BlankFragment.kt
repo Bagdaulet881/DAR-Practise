@@ -1,18 +1,22 @@
 package com.example.listfiltering
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.listfiltering.presenter.ArticlePresenter
+import com.example.listfiltering.presenter.ArticleView
 import kotlinx.android.synthetic.main.myquote_list.*
 import kotlinx.android.synthetic.main.myquote_list.view.*
 
 
-class BlankFragment : Fragment {
+class BlankFragment : Fragment, ArticleView {
     private var listener: MyQuoteAdapter.ItemClickListener? = null
+    val presenter = ArticlePresenter(this)
 
     private var clear: Button? = null
     private lateinit var adapter: MyQuoteAdapter
@@ -21,11 +25,16 @@ class BlankFragment : Fragment {
     constructor(list: ArrayList<Student>){
         setSortedList(list)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        info("check view")
+        presenter.getStudents()
+//----------------------------------------LISTENERS-------------------------------------------------
+
         listener = object : MyQuoteAdapter.ItemClickListener {
             override fun itemClick(position: Int, item: Student?) {
-                Toast.makeText(getContext(), "Student ${position}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getContext(), "Student ${position+1}", Toast.LENGTH_SHORT).show()
                 val studentDetail: Student
                 if(getSortedList().size==0){
                     studentDetail = data.getData2().get(position)
@@ -33,7 +42,7 @@ class BlankFragment : Fragment {
                 }else{
                     studentDetail = getSortedList().get(position)
                 }
-                val fragment2: Fragment = StudentDetailFragment(studentDetail)
+                val fragment2: Fragment = StudentDetailFragment(studentDetail.id, data)
                 fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragment2)
                     ?.commitAllowingStateLoss()
             }
@@ -48,9 +57,10 @@ class BlankFragment : Fragment {
                 newSortedList.clear()
                 Data.savedKeyWord = "empty"
                 Toast.makeText(getContext(), "Cleared! size: ${newSortedList.size}", Toast.LENGTH_SHORT).show()
-                val fragmentBack: Fragment = BlankFragment()
-                fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragmentBack)?.commitAllowingStateLoss()
-                adapter.notifyDataSetChanged()
+//                val fragmentBack: Fragment = BlankFragment()
+//                fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragmentBack)?.commitAllowingStateLoss()
+//                adapter.notifyDataSetChanged()
+                adapter.replaceItems(data.getData2())
             }else{
                 Toast.makeText(getContext(), "Nothing to clear!", Toast.LENGTH_SHORT).show()
 
@@ -58,28 +68,9 @@ class BlankFragment : Fragment {
         }
     }
 
-//    noneed
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+//--------------------------------------------------------------------------------------------noneed
 
 
-//        listener = object : MyQuoteAdapter.ItemClickListener {
-//            override fun itemClick(position: Int, item: Student?) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                Toast.makeText(getContext(), "Your answer is correct!", Toast.LENGTH_SHORT).show()
-//
-//            }
-//
-//            override fun onClick(v: View?, position: Int, item: Student?) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//        }
-
-    }
-
-
-    //    noneed
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -87,16 +78,8 @@ class BlankFragment : Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.myquote_list, container, false)
     }
-//    noneed
-    companion object {
 
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BlankFragment.apply {
-
-            }
-    }
-//    need
+//------------------------------------------NEW-SORTED-LIST-----------------------------------------
     private var newSortedList: ArrayList<Student> = ArrayList()
     fun getSortedList(): ArrayList<Student>{
         return this.newSortedList
@@ -104,10 +87,14 @@ class BlankFragment : Fragment {
     fun setSortedList(list: ArrayList<Student>){
         this.newSortedList = list
     }
+//--------------------------------------------------------------------------------------------------
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//TODO change items to getData your func
+
         data = Data()
+        info("check present")
+
         var items: ArrayList<Student>
 
         if(Data.savedKeyWord != "empty"){
@@ -125,8 +112,37 @@ class BlankFragment : Fragment {
         adapter = MyQuoteAdapter(listener)
         adapter.replaceItems(items)
         list.adapter = adapter
+        info("check activity")
     }
+//-------------------------------------DOWNLOAD-DATA-------------------------------------------------
+    override fun showStudents(students: List<Student>) {
+        data.students = students as ArrayList<Student>
+        Log.i("MSG","Show studentsUPD ${data.students.toString()}")
+        var items: ArrayList<Student>
+
+        if(Data.savedKeyWord != "empty"){
+            setSortedList(data.sortingBy(Data.savedKeyWord))
+            items = getSortedList()
+        }else{
+            if(getSortedList().size==0){
+                items = data.getData2()
+                //            if theres no sorted list
+            }else{
+                items = getSortedList()
+            }
+        }
+        adapter.replaceItems(items)
+        list.adapter = adapter
 
 
+    }
+//--------------------------------------------------------------------------------------------------
 
+    override fun onDestroy() {
+        presenter.destroy()
+        super.onDestroy()
+    }
+    private fun info(msg: String){
+        Log.i("MSG","$msg")
+    }
 }

@@ -31,8 +31,8 @@ class MyQuoteAdapter : RecyclerView.Adapter<MyQuoteAdapter.ViewHolder>{
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         val cnt:Int = position+1
-        val info:String = """Student $cnt ${item.name} ${item.lastname}
-${item.university}""".trimIndent()
+        val info:String = """Student $cnt ${item.name} ${item.surname}
+${item.univer}""".trimIndent()
 
         holder.tvInfo.text = info
         holder.itemView.setOnClickListener(){

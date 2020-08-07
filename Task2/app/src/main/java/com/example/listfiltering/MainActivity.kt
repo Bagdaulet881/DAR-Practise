@@ -26,11 +26,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onRestoreInstanceState(savedInstanceState)
         Data.savedKeyWord = savedInstanceState?.getString("keyword")!!
+        Data.selectedStudentId = savedInstanceState?.getInt("selectedId")!!
     }
+//TODO make student parceable
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("keyword", Data.savedKeyWord.toString())
-
+        outState.putInt("selectedId", Data.selectedStudentId)
         super.onSaveInstanceState(outState)
 
     }
