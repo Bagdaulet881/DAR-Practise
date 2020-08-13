@@ -1,7 +1,7 @@
 package com.example.listfiltering.`interface`
 
 import com.example.listfiltering.model.Post
-import com.example.listfiltering.Student
+import com.example.listfiltering.model.Student
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.http.GET

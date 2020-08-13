@@ -1,21 +1,28 @@
 package com.example.listfiltering
 
-import com.beust.klaxon.JsonArray
-import com.beust.klaxon.JsonObject
-import java.net.URL
-import com.beust.klaxon.Json
-import okhttp3.OkHttpClient
-import okhttp3.*
+import com.example.listfiltering.model.Student
+import com.google.gson.Gson
 
-import okhttp3.Request
-import java.io.IOException
+
+
 
 class Data {
     constructor()
+
     companion object{
+        val gson = Gson()
         var savedKeyWord: String = "empty"
-        var selectedStudentId: Int = -1
-        var savedData: ArrayList<Student> = ArrayList()
+        lateinit var selectedStudent: Student
+
+        fun getJsonString(student: Student):String{
+            val json = gson.toJson(student)
+            return json
+        }
+
+        fun getObjectFromJson(str: String): Student{
+            val st: Student = gson.fromJson(str, Student::class.java)
+            return st
+        }
     }
     var students: ArrayList<Student> = ArrayList()
 
@@ -38,6 +45,9 @@ class Data {
         return students
     }
 
+
+
+}
 //---------------------------------------OLD-PARSING------------------------------------------------
     //EZ parsing by json
 //    private val client = OkHttpClient()
@@ -85,4 +95,3 @@ class Data {
 //        }
 //        return res
 //    }
-}

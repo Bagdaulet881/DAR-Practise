@@ -1,4 +1,4 @@
-package com.example.listfiltering
+package com.example.listfiltering.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.listfiltering.Data
+import com.example.listfiltering.R
+import com.example.listfiltering.model.Student
 import kotlinx.android.synthetic.main.fragment_student_detail.view.*
 
 
@@ -15,13 +18,9 @@ import kotlinx.android.synthetic.main.fragment_student_detail.view.*
  */
 class StudentDetailFragment : Fragment {
     var data = Data()
-    lateinit var student: Student
+    var student = Data.selectedStudent
 
-    constructor(id: Int, dt: Data){
-        Data.selectedStudentId = id
-        data = dt
-        student = data.getData2().get(Data.selectedStudentId-1)
-//TODO make student parceable
+    constructor(){
     }
     private var name: TextView? = null
     private var lastname: TextView? = null
@@ -57,13 +56,19 @@ class StudentDetailFragment : Fragment {
         view.textView8?.setOnClickListener(){
             Toast.makeText(getContext(), "Students from ${student.city}", Toast.LENGTH_SHORT).show()
             Data.savedKeyWord = student.city
-            val fragmentBack: Fragment = BlankFragment(data.sortingBy(student.city))
+            val fragmentBack: Fragment =
+                BlankFragment(
+                    data.sortingBy(student.city)
+                )
             fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragmentBack)?.commitAllowingStateLoss()
         }
         view.textView9?.setOnClickListener(){
             Toast.makeText(getContext(), "Students of ${student.univer}", Toast.LENGTH_SHORT).show()
             Data.savedKeyWord = student.univer
-            val fragmentBack: Fragment = BlankFragment(data.sortingBy(student.univer))
+            val fragmentBack: Fragment =
+                BlankFragment(
+                    data.sortingBy(student.univer)
+                )
             fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragmentBack)?.commitAllowingStateLoss()
         }
     }

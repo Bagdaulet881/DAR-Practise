@@ -1,4 +1,4 @@
-package com.example.listfiltering
+package com.example.listfiltering.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -8,16 +8,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.listfiltering.presenter.ArticlePresenter
-import com.example.listfiltering.presenter.ArticleView
+import com.example.listfiltering.Data
+import com.example.listfiltering.MyQuoteAdapter
+import com.example.listfiltering.R
+import com.example.listfiltering.`interface`.ArticleContract
+import com.example.listfiltering.model.Student
+import com.example.listfiltering.presenter.Provider
 import kotlinx.android.synthetic.main.myquote_list.*
 import kotlinx.android.synthetic.main.myquote_list.view.*
 
 
-class BlankFragment : Fragment, ArticleView {
+class BlankFragment : Fragment, ArticleContract.View {
     private var listener: MyQuoteAdapter.ItemClickListener? = null
-    val presenter = ArticlePresenter(this)
-
+    var presenter: ArticleContract.Presenter = Provider().getArticlePresenter(this)
     private var clear: Button? = null
     private lateinit var adapter: MyQuoteAdapter
     lateinit var data: Data
@@ -32,7 +35,8 @@ class BlankFragment : Fragment, ArticleView {
         presenter.getStudents()
 //----------------------------------------LISTENERS-------------------------------------------------
 
-        listener = object : MyQuoteAdapter.ItemClickListener {
+        listener = object :
+            MyQuoteAdapter.ItemClickListener {
             override fun itemClick(position: Int, item: Student?) {
                 Toast.makeText(getContext(), "Student ${position+1}", Toast.LENGTH_SHORT).show()
                 val studentDetail: Student
@@ -42,7 +46,10 @@ class BlankFragment : Fragment, ArticleView {
                 }else{
                     studentDetail = getSortedList().get(position)
                 }
-                val fragment2: Fragment = StudentDetailFragment(studentDetail.id, data)
+                Data.selectedStudent = studentDetail
+                val fragment2: Fragment =
+                    StudentDetailFragment(
+                    )
                 fragmentManager?.beginTransaction()?.replace(R.id.main_container, fragment2)
                     ?.commitAllowingStateLoss()
             }
@@ -126,7 +133,7 @@ class BlankFragment : Fragment, ArticleView {
         }else{
             if(getSortedList().size==0){
                 items = data.getData2()
-                //            if theres no sorted list
+                //if theres no sorted list
             }else{
                 items = getSortedList()
             }

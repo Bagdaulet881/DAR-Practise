@@ -1,21 +1,17 @@
 package com.example.listfiltering.presenter
 
 import android.util.Log
-import com.example.listfiltering.Student
-import com.example.listfiltering.model.ArticleRepository
-import com.example.listfiltering.model.Post
+import com.example.listfiltering.model.Student
+import com.example.listfiltering.`interface`.ArticleContract
+import com.example.listfiltering.`interface`.ArticleRepoI
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class ArticlePresenter(var view: ArticleView?){
+class ArticlePresenter(var view: ArticleContract.View?, val repository: ArticleRepoI): ArticleContract.Presenter{
 
-    val repository = ArticleRepository()
     val disposable = CompositeDisposable()
-    fun getStudents(){
+    override fun getStudents(){
 //        repository.getPosts().enqueue(object: Callback<List<Post>>{
 //
 //            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
@@ -41,7 +37,7 @@ class ArticlePresenter(var view: ArticleView?){
         disposable.add(students)
     }
 
-    fun destroy(){
+    override fun destroy(){
         disposable.dispose()
         view = null
     }

@@ -3,8 +3,7 @@ package com.example.listfiltering
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import com.example.listfiltering.fragments.BlankFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,7 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //--------------------------------------------------------------------------------------------------
-        val fragment: Fragment = BlankFragment()
+        val fragment: Fragment =
+            BlankFragment()
 
         supportFragmentManager
             .beginTransaction() //
@@ -26,13 +26,13 @@ class MainActivity : AppCompatActivity() {
 
         super.onRestoreInstanceState(savedInstanceState)
         Data.savedKeyWord = savedInstanceState?.getString("keyword")!!
-        Data.selectedStudentId = savedInstanceState?.getInt("selectedId")!!
+        Data.selectedStudent = Data.getObjectFromJson(savedInstanceState?.getString("studentString")!!)
     }
 //TODO make student parceable
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("keyword", Data.savedKeyWord.toString())
-        outState.putInt("selectedId", Data.selectedStudentId)
+        outState.putString("studentString", Data.getJsonString(Data.selectedStudent))
         super.onSaveInstanceState(outState)
 
     }
