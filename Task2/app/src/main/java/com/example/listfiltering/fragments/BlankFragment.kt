@@ -16,11 +16,16 @@ import com.example.listfiltering.model.Student
 import com.example.listfiltering.presenter.Provider
 import kotlinx.android.synthetic.main.myquote_list.*
 import kotlinx.android.synthetic.main.myquote_list.view.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 
 class BlankFragment : Fragment, ArticleContract.View {
     private var listener: MyQuoteAdapter.ItemClickListener? = null
-    var presenter: ArticleContract.Presenter = Provider().getArticlePresenter(this)
+
+//    var presenter: ArticleContract.Presenter = Provider().getArticlePresenter(this)
+    private val presenter: ArticleContract.Presenter by inject{ parametersOf(this)}
+
     private var clear: Button? = null
     private lateinit var adapter: MyQuoteAdapter
     lateinit var data: Data

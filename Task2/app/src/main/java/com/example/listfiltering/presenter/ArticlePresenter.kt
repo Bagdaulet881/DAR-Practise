@@ -8,9 +8,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class ArticlePresenter(var view: ArticleContract.View?, val repository: ArticleRepoI): ArticleContract.Presenter{
+class ArticlePresenter( var view: ArticleContract.View?,
+                        val disposable: CompositeDisposable,
+                       private val repository: ArticleRepoI
+                       ): ArticleContract.Presenter{
 
-    val disposable = CompositeDisposable()
     override fun getStudents(){
 //        repository.getPosts().enqueue(object: Callback<List<Post>>{
 //
