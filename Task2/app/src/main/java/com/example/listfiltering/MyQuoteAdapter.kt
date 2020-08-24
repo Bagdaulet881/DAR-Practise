@@ -31,10 +31,11 @@ class MyQuoteAdapter : RecyclerView.Adapter<MyQuoteAdapter.ViewHolder>{
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
         val cnt:Int = position+1
-        val info:String = """Student $cnt ${item.name} ${item.surname}
-${item.univer}""".trimIndent()
+        val info:String = """Student $cnt ${item.name} ${item.surname}""".trimIndent()
 
         holder.tvInfo.text = info
+        holder.emailView.text = item.email
+        holder.emailView.transitionName = item.email
         holder.itemView.setOnClickListener(){
         if(listener!=null){
             listener!!.itemClick(position, item)
@@ -50,9 +51,12 @@ ${item.univer}""".trimIndent()
 
     inner class ViewHolder(containerView: View) : RecyclerView.ViewHolder(containerView){
         var tvInfo: TextView
+        var emailView: TextView
 //        var sourceTextView: TextView
         init {
             tvInfo = containerView.findViewById(R.id.tvInfo) //post title
+            emailView = containerView.findViewById(R.id.emailView)
+
 //            sourceTextView = containerView.findViewById(R.id.sourceTextView) //post title
 
         }
