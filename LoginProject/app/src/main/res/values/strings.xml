@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Griffon Dummy</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hintLogin">Email or Phone Number</string>
+    <string name="hintPassword">Password</string>
+
+</resources>
