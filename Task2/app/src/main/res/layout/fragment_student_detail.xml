@@ -21,7 +21,6 @@
             android:id="@+id/textView2"
 
             android:layout_width="158dp"
-
             android:layout_height="33dp"
 
             android:text=""
@@ -64,12 +63,15 @@
             app:layout_constraintTop_toBottomOf="@+id/name" />
 
         <TextView
+            android:background="@drawable/border_details"
+            android:paddingLeft="10dp"
+            android:paddingTop="7dp"
 
             android:id="@+id/email"
 
-            android:layout_width="wrap_content"
+            android:layout_width="257dp"
 
-            android:layout_height="33dp"
+            android:layout_height="35dp"
 
             android:layout_marginTop="24dp"
 
@@ -80,6 +82,7 @@
             app:layout_constraintTop_toBottomOf="@+id/lastname" />
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView7"
 
@@ -114,6 +117,7 @@
 
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView6"
 
@@ -148,6 +152,7 @@
 
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView4"
 
@@ -184,6 +189,7 @@
 
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView65"
 
@@ -220,6 +226,7 @@
 
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView5"
 
@@ -253,6 +260,7 @@
 
 
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView3"
 
@@ -286,6 +294,7 @@
         <TextView
 
             android:id="@+id/textView9"
+            android:background="@drawable/border_details"
 
             android:layout_width="180dp"
 
@@ -312,8 +321,8 @@
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
 
-
         <TextView
+            android:background="@drawable/border_details"
 
             android:id="@+id/textView8"
 
@@ -332,7 +341,6 @@
             android:text="Kyzylorda"
 
 
-
             app:layout_constraintEnd_toEndOf="@+id/textView7"
 
             app:layout_constraintHorizontal_bias="0.0"
@@ -341,11 +349,10 @@
 
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-
-
         <TextView
 
             android:id="@+id/textView10"
+            android:background="@drawable/border_details"
 
             android:layout_width="180dp"
 
@@ -380,6 +387,7 @@
         <TextView
 
             android:id="@+id/textView11"
+            android:background="@drawable/border_details"
 
             android:layout_width="180dp"
 
