@@ -11,6 +11,7 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.LoginView
@@ -38,7 +39,7 @@ class LoginFragment : Fragment(), LoginView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         presenter.getClientInfo()
-
+        //touch listener for showPassword
         etPassword.setOnTouchListener(OnTouchListener { v, event ->
             val DRAWABLE_LEFT = 0
             val DRAWABLE_TOP = 1
@@ -48,7 +49,7 @@ class LoginFragment : Fragment(), LoginView {
                 if (event.rawX >= etPassword.getRight() - etPassword.getCompoundDrawables().get(
                         DRAWABLE_RIGHT
                     ).getBounds().width()
-                ) { // your action here
+                ) {
                     showPassword()
                     return@OnTouchListener true
                 }
@@ -68,16 +69,21 @@ class LoginFragment : Fragment(), LoginView {
         super.onDestroy()
     }
     fun changeDesign() {
-
-        Glide.with(this).load(db.clientInfo.logoImage).into(imageView)
+//split them to func()
+        Glide.with(this)
+            .load(db.clientInfo.logoImage)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(imageView)
 
         if(db.clientInfo.buttonColor?.type=="gradient"){
             val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(
-                    Color.parseColor(db.clientInfo.buttonColor!!.colors[0]),
-                    Color.parseColor(db.clientInfo.buttonColor!!.colors[1]),
-                    Color.parseColor(db.clientInfo.buttonColor!!.colors[2])
-                ))
+//                intArrayOf(
+//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[0]),
+//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[1]),
+//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[2])
+//                )
+                db.clientInfo.buttonColor!!.colors.filter { it.isNotBlank() }.map { Color.parseColor(it) }.toIntArray()
+            )
             btnSignin.background = gradientDrawable
         }else{
             btnSignin.setBackgroundColor(Color.parseColor(db.clientInfo.buttonColor!!.colors[0]))

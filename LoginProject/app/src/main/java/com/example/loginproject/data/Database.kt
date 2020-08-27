@@ -11,6 +11,6 @@ class Database {
     fun setClientInfo(clt: Any){
         clientInfo = clt as ClientInfo
     }
-
+//TODO sharedPref
 
 }
