@@ -7,5 +7,7 @@
     <color name="colorAccent">#ff03dac5</color>
 
     <color name="tv">#ff1f3151</color>
+    <color name="red">#ff0000</color>
+    <color name="black">#000000</color>
 
 </resources>

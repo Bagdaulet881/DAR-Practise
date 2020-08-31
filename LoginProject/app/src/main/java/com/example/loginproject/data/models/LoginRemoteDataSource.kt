@@ -1,7 +1,8 @@
 package com.example.loginproject.data.models
 
-import com.example.loginproject.data.network.API
-import com.example.loginproject.data.network.ClientInfo
+import android.util.Log
+import com.example.loginproject.data.network.*
+import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.*
 
@@ -11,5 +12,13 @@ class LoginRemoteDataSource {
 
     fun downloadClientInfo():Observable<ClientInfo>{
         return API.apiService.getClientInfo(client_id,client_secret)
+    }
+
+    fun signUp(username:String, pwd:String):Observable<AccessToken>{
+        return API.apiService.signUp("Content-Type", NewUserBody(client_id, client_secret,username,pwd))
+    }
+
+    fun verifyPhoneNumber(code:String):Completable{
+        return API.apiService.phoneVerify("", SmsCodeRequestBody(code))
     }
 }

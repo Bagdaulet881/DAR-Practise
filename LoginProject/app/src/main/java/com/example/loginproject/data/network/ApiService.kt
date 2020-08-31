@@ -33,19 +33,19 @@ interface ApiService {
     fun revokeAccessToken(
         @Body body: RevokeAccessTokenBody?
     ): Completable
-
+//TODO
     @POST("api/v1/oauth/signup")
     fun signUp(
         @Header("Content-Type") contentType: String,
         @Body body: NewUserBody
     ) : Observable<AccessToken>
-
+//TODO
     @POST("api/v1/oauth/signup/phone/verify")
     fun phoneVerify(
         @Query("sid") sid: String,
         @Body smsCodeBody: SmsCodeRequestBody
     ): Completable
-
+//TODO
     @POST("api/v1/oauth/register")
     fun registerWithPassword(
         @Query("sid") sid: String,

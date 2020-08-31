@@ -5,5 +5,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hintLogin">Email or Phone Number</string>
     <string name="hintPassword">Password</string>
+    <string name="termsConditions">I agree with <u>terms and conditions</u></string>
 
 </resources>

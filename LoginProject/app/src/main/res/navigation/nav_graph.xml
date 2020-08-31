@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ProfileFragment"
+    >
+    <fragment
+        android:id="@+id/ProfileFragment"
+        android:name="com.example.loginproject.main.profile.ProfileFragment"
+        tools:layout="@layout/fragment_profile"
+        android:label="PROFILE">
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment"/>
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue="test"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/LoginFragment"
+        android:name="com.example.loginproject.main.login.LoginFragment"
+        tools:layout="@layout/fragment_login"
+        android:label="LOGIN">
+        <action
+            android:id="@+id/toProfile"
+            app:destination="@id/ProfileFragment"/>
+        <action
+            android:id="@+id/toRegister"
+            app:destination="@id/RegFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/RegFragment"
+        android:name="com.example.loginproject.main.register.RegisterFragment"
+        tools:layout="@layout/fragment_register"
+        android:label="REGISTER">
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment"/>
+        <action
+            android:id="@+id/toConfirm"
+            app:destination="@id/ConfirmFragment"/>
+        <action
+            android:id="@+id/toVerify"
+            app:destination="@id/VerifyFragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/ConfirmFragment"
+        android:name="com.example.loginproject.main.register.ConfirmFragment"
+        tools:layout="@layout/fragment_confirm"
+        android:label="CONFIRM_PASS">
+        <action
+            android:id="@+id/toNEXT"
+            app:destination="@id/RegFragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/VerifyFragment"
+        android:name="com.example.loginproject.main.register.VerifyFragment"
+        tools:layout="@layout/fragment_verify"
+        android:label="VERIFY_SMS">
+        <action
+            android:id="@+id/toConfirm"
+            app:destination="@id/ConfirmFragment"/>
+
+    </fragment>
+</navigation>

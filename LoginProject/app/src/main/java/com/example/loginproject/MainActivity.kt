@@ -17,17 +17,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        btnStart.setOnClickListener(){
-            btnStart.visibility = View.GONE
-            val fragment: Fragment =
-                LoginFragment()
-
-            supportFragmentManager
-                .beginTransaction() //
-                .replace(R.id.main_container, fragment)
-                .commitAllowingStateLoss()
-        }
     }
 
 

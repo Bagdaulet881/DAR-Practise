@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/regpage2"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView android:id="@+id/imageViewReg"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054" />
+    <TextView android:textSize="20.0dip"
+        android:textColor="@color/tv"
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32.0dip"
+        android:text="Sign Up"
+        android:fontFamily="sans-serif"
+        android:textFontWeight="500"
+        app:layout_constraintEnd_toEndOf="@id/imageViewReg"
+        app:layout_constraintStart_toStartOf="@id/imageViewReg"
+        app:layout_constraintTop_toBottomOf="@id/imageViewReg" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24.0dip"
+        android:text="Create password"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/etCreatePass1"
+        app:layout_constraintStart_toStartOf="@id/etCreatePass1"
+        app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+
+    <EditText android:id="@+id/etCreatePass2"
+        android:background="@drawable/edittext_border"
+        android:paddingLeft="13.0dip"
+        android:paddingRight="8.0dip"
+        android:layout_width="0.0dip"
+        android:layout_height="60.0dip"
+        android:layout_marginTop="25.0dip"
+        android:hint="Confirm password"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawableRight="@drawable/ic_visibility_black_24dp"
+        android:drawablePadding="16.0dip"
+        android:inputType="textPassword"
+        android:layout_marginStart="24.0dip"
+        android:layout_marginEnd="24.0dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etCreatePass1" />
+
+    <EditText android:id="@+id/etCreatePass1"
+        android:background="@drawable/edittext_border"
+        android:paddingLeft="13.0dip"
+        android:paddingRight="8.0dip"
+        android:layout_width="0.0dip"
+        android:layout_height="60.0dip"
+        android:layout_marginTop="25.0dip"
+        android:hint="@string/hintPassword"
+        android:drawableLeft="@drawable/ic_password"
+        android:drawableRight="@drawable/ic_visibility_black_24dp"
+        android:drawablePadding="16.0dip"
+        android:inputType="textPassword"
+        android:layout_marginStart="24.0dip"
+        android:layout_marginEnd="24.0dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+
+
+    <TextView android:id="@+id/tvError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4.0dip"
+        android:text=""
+        android:tooltipText="Some input errors will be shown here"
+        app:layout_constraintStart_toStartOf="@id/etCreatePass1"
+        app:layout_constraintTop_toBottomOf="@id/etCreatePass1" />
+
+    <Button android:textColor="@android:color/white"
+        android:id="@+id/btnNext"
+        android:background="@android:color/background_dark"
+        android:layout_width="0.0dip"
+        android:layout_height="75.0dip"
+        android:layout_marginTop="85.0dip"
+        android:text="CREATE ACCOUNT"
+        app:layout_constraintEnd_toEndOf="@id/etCreatePass1"
+        app:layout_constraintStart_toStartOf="@id/etCreatePass1"
+        app:layout_constraintTop_toBottomOf="@id/etCreatePass2" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

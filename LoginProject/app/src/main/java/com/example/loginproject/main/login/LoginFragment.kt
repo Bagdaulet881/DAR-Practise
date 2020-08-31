@@ -18,6 +18,7 @@ import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.fragment_login.*
+import androidx.navigation.fragment.findNavController
 
 
 class LoginFragment : Fragment(), LoginView {
@@ -40,6 +41,7 @@ class LoginFragment : Fragment(), LoginView {
         super.onViewCreated(view, savedInstanceState)
         presenter.getClientInfo()
         //touch listener for showPassword
+
         etPassword.setOnTouchListener(OnTouchListener { v, event ->
             val DRAWABLE_LEFT = 0
             val DRAWABLE_TOP = 1
@@ -56,6 +58,11 @@ class LoginFragment : Fragment(), LoginView {
             }
             false
         })
+
+        btnSignup.setOnClickListener{
+            findNavController().navigate(LoginFragmentDirections.toRegister())
+        }
+
     }
     override fun clientInfo(clt: ClientInfo) {
         Log.i("MSG", clt.toString())
@@ -68,13 +75,13 @@ class LoginFragment : Fragment(), LoginView {
         presenter.destroy()
         super.onDestroy()
     }
-    fun changeDesign() {
-//split them to func()
+    fun uploadLogoDesign(){
         Glide.with(this)
             .load(db.clientInfo.logoImage)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .into(imageView)
-
+    }
+    fun btnColorDesign(){
         if(db.clientInfo.buttonColor?.type=="gradient"){
             val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
 //                intArrayOf(
@@ -88,11 +95,14 @@ class LoginFragment : Fragment(), LoginView {
         }else{
             btnSignin.setBackgroundColor(Color.parseColor(db.clientInfo.buttonColor!!.colors[0]))
         }
-
-
+    }
+    fun changeDesign() {
+        uploadLogoDesign()
+        btnColorDesign()
         loginpage.setBackgroundColor(
             Color.parseColor(db.clientInfo.backgroundColor))
     }
+
     fun showPassword() {
         if(etPassword.inputType == 129){
             Log.i("MSG", "show pass")
