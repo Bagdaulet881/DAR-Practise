@@ -17,7 +17,17 @@ data class AccessToken(
         expirationDate != null &&
                 Calendar.getInstance().after(expirationDate)
 }
-
+@Parcelize
+data class TempToken(
+    @SerializedName("redirect_uri") val uri: String = "",
+    @SerializedName("sid") val sid: String = "",
+    @SerializedName("add_info") val add_info: String = ""
+) : Parcelable
+@Parcelize
+data class TempToken2(
+    @SerializedName("redirect_uri") val uri: String = "",
+    @SerializedName("sid") val sid: String = ""
+) : Parcelable
 @Parcelize
 data class ClientInfo (
     @SerializedName("id") val id: String,

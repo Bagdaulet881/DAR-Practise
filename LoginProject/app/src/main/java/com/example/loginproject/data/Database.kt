@@ -1,6 +1,8 @@
 package com.example.loginproject.data
 
+import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.ClientInfo
+import com.example.loginproject.data.network.TempToken
 import java.util.regex.Pattern
 
 class Database {
@@ -8,6 +10,19 @@ class Database {
     lateinit var userEmail: String
     lateinit var userPhoneNumber: String
     lateinit var userPassword: String
+    lateinit var typeOfRegister: String
+    lateinit var token: AccessToken
+    lateinit var sid: String
+    var timer = "20"
+    lateinit var tempToken: TempToken
+    var remainingTime = 0
+    var isTimeLeft = false
+    fun setTempTokenData(temp: TempToken){
+        tempToken = temp
+        timer = temp.add_info
+        sid = temp.sid
+    }
+
     fun getClientInfo(): Any{
         return clientInfo
     }
@@ -32,10 +47,12 @@ class Database {
     fun checkForSignUpType(type:String):String{
         if(isValidMail(type)){
             userEmail = type
+            typeOfRegister = "EMAIL"
             return "EMAIL"
         }else
             if (isValidMobile(type)){
                 userPhoneNumber = type
+                typeOfRegister = "PHONE"
                 return "PHONE"
             }else
                 return "Incorrect type"

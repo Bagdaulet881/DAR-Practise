@@ -53,6 +53,18 @@
         app:layout_constraintEnd_toEndOf="@id/etSms"
         app:layout_constraintStart_toStartOf="@id/etSms"
         app:layout_constraintTop_toBottomOf="@id/textView3" />
+    <Button
+        android:textColor="@android:color/white"
+        android:id="@+id/btnResend"
+        android:background="@android:color/background_dark"
+        android:layout_width="150dp"
+        android:layout_height="23.0dip"
+        android:layout_marginTop="24.0dip"
+        android:text="RESEND"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/etSms"
+        app:layout_constraintStart_toStartOf="@id/etSms"
+        app:layout_constraintTop_toBottomOf="@id/textView3" />
 
     <EditText android:id="@+id/etSms"
         android:background="@drawable/edittext_border"

@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity
@@ -24,6 +25,7 @@ import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.RegView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.SmsCodeRequestBody
+import com.example.loginproject.data.network.TempToken
 import com.example.loginproject.data.presenter.RegPresenter
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_confirm.*
@@ -52,13 +54,19 @@ class ConfirmFragment : Fragment() , RegView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        changeDesign()
         btnNext.setOnClickListener{
             if(checkForPassword(etCreatePass1.text.toString(),etCreatePass2.text.toString())){
                 db.userPassword = etCreatePass1.text.toString()
-                Toast.makeText(context, db.userEmail + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
-
-                presenter.signUp(db.userEmail, db.userPassword)
-                Log.i("MSG","presenter singup")
+                if(db.typeOfRegister.equals("PHONE")){
+                    presenter.registerWithPwd(db.sid, etCreatePass1.text.toString())
+                    Log.i("MSG","presenter register with PASSWORD")
+                    Toast.makeText(context, db.userPhoneNumber + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
+                }else{
+                    presenter.signUp(db.userEmail, db.userPassword)
+                    Log.i("MSG","presenter singup")
+                    Toast.makeText(context, db.userEmail + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
+                }
             }else{
                 view.tvError.text = "Check your password"
             }
@@ -102,11 +110,31 @@ class ConfirmFragment : Fragment() , RegView{
         super.onDestroy()
     }
     fun checkForPassword(p1:String,p2:String):Boolean{
-        if(p1.equals(p2)){
-            return true
-        }else
-            return false
+        return p1.equals(p2)
     }
+
+
+    override fun signUp(token: AccessToken) {
+        db.token = token
+        Log.i("MSG", "REG with token->" + token)
+        if (db.typeOfRegister.equals("PHONE")){
+            Toast.makeText(context, "Registered as " + db.userPhoneNumber , Toast.LENGTH_SHORT).show()
+        }else
+            Toast.makeText(context, "Registered as " + db.userEmail , Toast.LENGTH_SHORT).show()
+//        findNavController().navigate(ConfirmFragmentDirections.toEnd())
+    }
+
+    override fun phoneVerify(temp: TempToken) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun registerWithPassword(token: AccessToken) {
+        Log.i("MSG", "Phone Number registered w/ password token-> " + token)
+    }
+
+
+//------------------------------------------CHANGE DESIGN-------------------------------------------
+
     fun showPassword(v:EditText) {
         if(v.inputType == 129){
             Log.i("MSG", "show pass")
@@ -120,17 +148,6 @@ class ConfirmFragment : Fragment() , RegView{
         }
 
     }
-
-    override fun signUp(token: AccessToken) {
-        Log.i("MSG","presenter singup213")
-
-        Log.i("MSG", "token getting " + token.tokenType)
-    }
-
-    override fun phoneVerify(cmp: Completable) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     fun uploadLogoDesign(){
         Glide.with(this)
             .load(db.clientInfo.logoImage)
@@ -141,11 +158,6 @@ class ConfirmFragment : Fragment() , RegView{
         if(MainActivity.db.clientInfo.buttonColor?.type=="gradient"){
             val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-//                intArrayOf(
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[0]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[1]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[2])
-//                )
                 db.clientInfo.buttonColor!!.colors.filter { it.isNotBlank() }.map { Color.parseColor(it) }.toIntArray()
             )
             btnNext.background = gradientDrawable

@@ -55,8 +55,8 @@
         tools:layout="@layout/fragment_confirm"
         android:label="CONFIRM_PASS">
         <action
-            android:id="@+id/toNEXT"
-            app:destination="@id/RegFragment"/>
+            android:id="@+id/toEnd"
+            app:destination="@id/ProfileFragment"/>
 
     </fragment>
     <fragment

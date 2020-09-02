@@ -55,6 +55,7 @@ class RegisterFragment : Fragment() {
                     findNavController().navigate(RegisterFragmentDirections.toConfirm())
                 }else
                     if(db.checkForSignUpType(type).equals("PHONE")){
+
                         findNavController().navigate(RegisterFragmentDirections.toVerify())
                     }else{
                         tvError.text = "Enter correct email or phone number"

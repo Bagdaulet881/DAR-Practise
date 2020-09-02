@@ -14,11 +14,21 @@ class LoginRemoteDataSource {
         return API.apiService.getClientInfo(client_id,client_secret)
     }
 
-    fun signUp(username:String, pwd:String):Observable<AccessToken>{
-        return API.apiService.signUp("Content-Type", NewUserBody(client_id, client_secret,username,pwd))
-    }
+    fun signUp(username:String, pwd:String?):Observable<AccessToken>{
 
-    fun verifyPhoneNumber(code:String):Completable{
-        return API.apiService.phoneVerify("", SmsCodeRequestBody(code))
+        return API.apiService.signUp("application/json", NewUserBody(client_id, client_secret,username,pwd))
+    }
+    fun signUpPhone(username:String):Observable<TempToken>{
+
+        return API.apiService.signUpPhone("application/json", NewUserBody(client_id, client_secret,username))
+    }
+    fun verifyPhoneNumber(sid:String, code:String):Completable{
+        return API.apiService.phoneVerify(sid, SmsCodeRequestBody(code))
+    }
+    fun verifyPhoneNumber2(sid:String, code:String):Observable<TempToken>{
+        return API.apiService.phoneVerify2(sid, SmsCodeRequestBody(code))
+    }
+    fun registerWithPwd(sid:String, pwd:String):Observable<AccessToken>{
+        return API.apiService.registerWithPassword(sid, PasswordRequestBody(pwd))
     }
 }

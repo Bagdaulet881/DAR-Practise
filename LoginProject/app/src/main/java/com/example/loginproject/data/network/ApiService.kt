@@ -39,12 +39,22 @@ interface ApiService {
         @Header("Content-Type") contentType: String,
         @Body body: NewUserBody
     ) : Observable<AccessToken>
+    @POST("api/v1/oauth/signup")
+    fun signUpPhone(
+        @Header("Content-Type") contentType: String,
+        @Body body: NewUserBody
+    ) : Observable<TempToken>
 //TODO
     @POST("api/v1/oauth/signup/phone/verify")
     fun phoneVerify(
         @Query("sid") sid: String,
         @Body smsCodeBody: SmsCodeRequestBody
     ): Completable
+    @POST("api/v1/oauth/signup/phone/verify")
+    fun phoneVerify2(
+        @Query("sid") sid: String,
+        @Body smsCodeBody: SmsCodeRequestBody
+    ):Observable<TempToken>
 //TODO
     @POST("api/v1/oauth/register")
     fun registerWithPassword(
