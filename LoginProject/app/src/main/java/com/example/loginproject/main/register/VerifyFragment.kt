@@ -36,7 +36,6 @@ class VerifyFragment : Fragment() , RegView{
     lateinit var remainingMillis: Any
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sendCode()
     }
 
     override fun onCreateView(
@@ -49,21 +48,20 @@ class VerifyFragment : Fragment() , RegView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvTimer.text = "sending.."
         changeDesign()
         if (db.isTimeLeft){
             runFromSavedTimer()
 //            true if user sent code already
         }else{
 //            false its like a first start
+            sendCode()
             seconds = db.timer.toInt()
         }
 
         btnVerify.setOnClickListener{
             if(etSms.text.isNotBlank()){
-                timer.cancel()
-                tvTimer.text = "verified!"
                 verifyCode(db.sid, etSms.text.toString())
-
             }else{
                 view.tvError.text = "Empty field"
             }
@@ -81,10 +79,7 @@ class VerifyFragment : Fragment() , RegView{
     }
     fun sendCode(){
         presenter.signUpPhone(db.userPhoneNumber)
-        seconds = db.timer.toInt()
-        Log.i("MSG", "sendCode timer " + seconds)
-        Thread.sleep(2000L)
-        timer()
+
     }
 
     fun verifyCode(sid:String, code: String){
@@ -97,6 +92,8 @@ class VerifyFragment : Fragment() , RegView{
 
     override fun phoneVerify(temp: TempToken) {
         Log.i("MSG","VERIFY " + temp)
+        timer.cancel()
+        tvTimer.text = "verified!"
         db.setTempTokenData(temp)
         findNavController().navigate(VerifyFragmentDirections.toConfirm())
     }
@@ -105,6 +102,20 @@ class VerifyFragment : Fragment() , RegView{
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun dataFlowWait() {
+//        fun will work after getting "add_info" data from server
+        seconds = db.timer.toInt()
+        Log.i("MSG", "sendCode timer " + seconds)
+        timer()
+    }
+
+    override fun handleError(type: String) {
+        if (type.equals("pvError")){
+            view?.tvError?.text = "wrong code try again"
+        }
+    }
+//------------------------------------------TIMER---------------------------------------------------
+
     fun timer(){
             timer = object : CountDownTimer(seconds.toLong() * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -112,8 +123,9 @@ class VerifyFragment : Fragment() , RegView{
                     var sec = (millisUntilFinished / 1000)%60
                     remainingMillis = millisUntilFinished
                     var min = (millisUntilFinished / (1000*60))%60
-
-                    tvTimer.text = (min.toString() + " : " + sec.toString())
+                    var minStr = min.toString()
+                    var secStr = sec.toString()
+                    tvTimer.text = (minStr + " : " + secStr)
                 }
 
                 override fun onFinish() {

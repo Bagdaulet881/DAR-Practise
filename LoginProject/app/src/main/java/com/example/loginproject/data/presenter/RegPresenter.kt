@@ -37,6 +37,7 @@ class RegPresenter(var view: RegView?) {
             .subscribe({
                 Log.i("MSG","presenter " + it)
                 db.setTempTokenData(it)
+                view?.dataFlowWait()
             },{
                 it.printStackTrace()
             })
@@ -54,6 +55,7 @@ class RegPresenter(var view: RegView?) {
                 view?.phoneVerify(it)
             },{
                 it.printStackTrace()
+                view?.handleError("pvError")
                 Log.i("MSG","phone Verified! ERROR ")
             })
         disposable.add(info)

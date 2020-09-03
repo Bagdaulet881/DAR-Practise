@@ -130,6 +130,15 @@ class ConfirmFragment : Fragment() , RegView{
 
     override fun registerWithPassword(token: AccessToken) {
         Log.i("MSG", "Phone Number registered w/ password token-> " + token)
+//      no needed
+    }
+
+    override fun dataFlowWait() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun handleError(type: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

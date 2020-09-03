@@ -17,9 +17,13 @@ class Database {
     lateinit var tempToken: TempToken
     var remainingTime = 0
     var isTimeLeft = false
+
+
     fun setTempTokenData(temp: TempToken){
         tempToken = temp
-        timer = temp.add_info
+        if (!temp.add_info.isNullOrBlank()){
+            timer = temp.add_info
+        }
         sid = temp.sid
     }
 
