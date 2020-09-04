@@ -30,6 +30,9 @@
         <action
             android:id="@+id/toRegister"
             app:destination="@id/RegFragment"/>
+        <action
+            android:id="@+id/toReset"
+            app:destination="@id/ResetFragment"/>
 
     </fragment>
 
@@ -57,6 +60,9 @@
         <action
             android:id="@+id/toEnd"
             app:destination="@id/ProfileFragment"/>
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment"/>
 
     </fragment>
     <fragment
@@ -67,6 +73,19 @@
         <action
             android:id="@+id/toConfirm"
             app:destination="@id/ConfirmFragment"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/ResetFragment"
+        android:name="com.example.loginproject.main.reset.ResetFragment"
+        tools:layout="@layout/fragment_reset"
+        android:label="RESET">
+        <action
+            android:id="@+id/toVerify"
+            app:destination="@id/VerifyFragment"/>
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/LoginFragment"/>
 
     </fragment>
 </navigation>

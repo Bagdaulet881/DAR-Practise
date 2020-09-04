@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -19,6 +20,12 @@ import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.fragment_login.*
 import androidx.navigation.fragment.findNavController
+import com.example.loginproject.data.network.AccessToken
+import com.example.loginproject.main.register.RegisterFragmentDirections
+import kotlinx.android.synthetic.main.fragment_login.btnSignin
+import kotlinx.android.synthetic.main.fragment_login.tvError
+import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_register.*
 
 
 class LoginFragment : Fragment(), LoginView {
@@ -58,9 +65,29 @@ class LoginFragment : Fragment(), LoginView {
             }
             false
         })
+        btnSignin.setOnClickListener{
+            val type = view.etUsername.text.toString()
+            if(view.etUsername.text.isNotEmpty() && view.etPassword.text.isNotEmpty()){
+                if(db.checkForSignUpType(type).equals("EMAIL") || db.checkForSignUpType(type).equals("PHONE")){
+                    val username = view.etUsername.text.toString()
+                    val password = view.etPassword.text.toString()
+                    db.userEmail = username
+                    db.userPassword = password
+                    tvError.text = ""
+                    presenter.login(null,"password",username,password,null)
+                }else{
+                    tvError.text = "Enter correct email or phone number"
+                }
+            }else{
+                tvError.text = "Field cannot be empty"
+            }
 
+        }
         btnSignup.setOnClickListener{
             findNavController().navigate(LoginFragmentDirections.toRegister())
+        }
+        tvForgot.setOnClickListener{
+            findNavController().navigate(LoginFragmentDirections.toReset())
         }
 
     }
@@ -71,10 +98,30 @@ class LoginFragment : Fragment(), LoginView {
 
     }
 
+    override fun login(token: AccessToken) {
+        db.token = token
+        Log.i("MSG", "logges success->" + token)
+        Toast.makeText(context, "logged in successfully", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun handleError(type: String) {
+        if(type.contains("404")){
+            tvError.text = "User not found"
+        }else
+            if(type.contains("403")){
+                tvError.text = "Wrong password or pin"
+            }else
+                tvError.text = "Wrong input value"
+        Log.i("MSG", "logged error" + type)
+
+    }
+
     override fun onDestroy() {
         presenter.destroy()
         super.onDestroy()
     }
+//------------------------------------------CHANGE DESIGN-------------------------------------------
+
     fun uploadLogoDesign(){
         Glide.with(this)
             .load(db.clientInfo.logoImage)
@@ -84,11 +131,6 @@ class LoginFragment : Fragment(), LoginView {
     fun btnColorDesign(){
         if(db.clientInfo.buttonColor?.type=="gradient"){
             val gradientDrawable = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
-//                intArrayOf(
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[0]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[1]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[2])
-//                )
                 db.clientInfo.buttonColor!!.colors.filter { it.isNotBlank() }.map { Color.parseColor(it) }.toIntArray()
             )
             btnSignin.background = gradientDrawable

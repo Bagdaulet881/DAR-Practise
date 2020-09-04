@@ -16,10 +16,12 @@ import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.RegView
+import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.SmsCodeRequestBody
 import com.example.loginproject.data.network.TempToken
 import com.example.loginproject.data.presenter.RegPresenter
+import com.example.loginproject.data.presenter.ResetPresenter
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.imageViewReg
@@ -28,8 +30,9 @@ import kotlinx.android.synthetic.main.fragment_verify.view.*
 import java.util.*
 
 
-class VerifyFragment : Fragment() , RegView{
+class VerifyFragment : Fragment() , RegView, ResetView{
     val presenter = RegPresenter(this)
+    val presenterReset = ResetPresenter(this)
 
     lateinit var timer: CountDownTimer
     var seconds = 0
@@ -75,15 +78,35 @@ class VerifyFragment : Fragment() , RegView{
     override fun onDestroy() {
         saveTimer()
         timer.cancel()
+        Log.i("MSG", "onDestroy called")
         super.onDestroy()
     }
     fun sendCode(){
-        presenter.signUpPhone(db.userPhoneNumber)
-
+        if(db.verifyType == "reset"){
+            if(db.isFirstStart){
+                db.isFirstStart = false
+                dataFlowWait()
+            }else{
+                if(db.typeOfRegister=="EMAIL"){
+                    Log.i("MSG", "resend code" + db.userEmail)
+                    presenterReset.resetRequest("email", db.userEmail)
+                }else
+                    presenterReset.resetRequest("phone_number", db.userPhoneNumber)
+            }
+        }else
+            if(db.verifyType == "reg"){
+                presenter.signUpPhone(db.userPhoneNumber)
+            }
     }
 
     fun verifyCode(sid:String, code: String){
-        presenter.verifyCode(sid, code)
+
+        if(db.verifyType == "reset"){
+            presenterReset.resetVerifyCode(code)
+        }else
+            if(db.verifyType == "reg"){
+                presenter.verifyCode(sid, code)
+            }
     }
 
     override fun signUp(token: AccessToken) {
@@ -93,6 +116,7 @@ class VerifyFragment : Fragment() , RegView{
     override fun phoneVerify(temp: TempToken) {
         Log.i("MSG","VERIFY " + temp)
         timer.cancel()
+        db.isTimeLeft = false
         tvTimer.text = "verified!"
         db.setTempTokenData(temp)
         findNavController().navigate(VerifyFragmentDirections.toConfirm())
@@ -100,6 +124,20 @@ class VerifyFragment : Fragment() , RegView{
 
     override fun registerWithPassword(token: AccessToken) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun response(str:String) {
+
+        if(str == "verified"){
+            db.code = etSms.text.toString()
+            Log.i("MSG", "toConfirm")
+            timer.cancel()
+            db.isTimeLeft = false
+            findNavController().navigate(VerifyFragmentDirections.toConfirm())
+        }else{
+            Log.i("MSG", "code Resent true")
+            dataFlowWait()
+        }
     }
 
     override fun dataFlowWait() {
@@ -110,8 +148,13 @@ class VerifyFragment : Fragment() , RegView{
     }
 
     override fun handleError(type: String) {
+        if(type.contains("500")){
+            view?.tvError?.text = "Invalid or expired secret code"
+        }else
         if (type.equals("pvError")){
             view?.tvError?.text = "wrong code try again"
+        }else{
+            view?.tvError?.text = type
         }
     }
 //------------------------------------------TIMER---------------------------------------------------
@@ -153,7 +196,7 @@ class VerifyFragment : Fragment() , RegView{
         {
             var secs = db.remainingTime-currentTime.toInt()
             Log.i("MSG", "TIMER " + secs)
-            db.isTimeLeft = false
+            db.isTimeLeft = true
             seconds = secs
             timer()
         }

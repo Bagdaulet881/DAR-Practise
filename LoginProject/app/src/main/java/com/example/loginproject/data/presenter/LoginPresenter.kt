@@ -1,5 +1,6 @@
 package com.example.loginproject.data.presenter
 
+import android.util.Log
 import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.models.LoginRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,6 +19,22 @@ class LoginPresenter(var view: LoginView?) {
                 view?.clientInfo(clt)
             },{
                 it.printStackTrace()
+            })
+        disposable.add(info)
+    }
+
+    fun login(code:String?, type:String, username:String, password:String, refreshToken:String?){
+        val info = repository.login(code,type,username,password,refreshToken)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({login->
+                Log.i("MSG", "logged true")
+                view?.login(login)
+            },{
+                it.printStackTrace()
+                view?.handleError(it.message!!)
+                Log.i("MSG", "logged false")
+
             })
         disposable.add(info)
     }

@@ -13,13 +13,13 @@ class LoginRemoteDataSource {
     fun downloadClientInfo():Observable<ClientInfo>{
         return API.apiService.getClientInfo(client_id,client_secret)
     }
-
+    fun login(code:String?, type:String, username:String, password:String, refreshToken:String?):Observable<AccessToken>{
+        return API.apiService.grantNewAccessToken(code,type,client_id,client_secret,username,password,refreshToken)
+    }
     fun signUp(username:String, pwd:String?):Observable<AccessToken>{
-
         return API.apiService.signUp("application/json", NewUserBody(client_id, client_secret,username,pwd))
     }
     fun signUpPhone(username:String):Observable<TempToken>{
-
         return API.apiService.signUpPhone("application/json", NewUserBody(client_id, client_secret,username))
     }
     fun verifyPhoneNumber(sid:String, code:String):Completable{
@@ -31,4 +31,17 @@ class LoginRemoteDataSource {
     fun registerWithPwd(sid:String, pwd:String):Observable<AccessToken>{
         return API.apiService.registerWithPassword(sid, PasswordRequestBody(pwd))
     }
+//-------------------------------------------RESET--------------------------------------------------
+
+    fun requestOTP(reset_option:String, username:String):Observable<TempToken>{
+        return API.apiService.requestOTP(client_id,reset_option,username)
+    }
+    fun resetVerify(code:String):Observable<TempToken>{
+        return API.apiService.resetVerify(code, client_id)
+    }
+    fun updatePassword(code:String, newPassword:String):Observable<TempToken>{
+        return API.apiService.updatePassword(code, client_id, newPassword)
+    }
+
+
 }

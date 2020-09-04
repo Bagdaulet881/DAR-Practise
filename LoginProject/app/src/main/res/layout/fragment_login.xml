@@ -75,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4.0dip"
         android:text=""
+        android:textColor="@color/red"
         android:tooltipText="Some input errors will be shown here"
         app:layout_constraintStart_toStartOf="@id/etUsername"
         app:layout_constraintTop_toBottomOf="@id/etUsername" />

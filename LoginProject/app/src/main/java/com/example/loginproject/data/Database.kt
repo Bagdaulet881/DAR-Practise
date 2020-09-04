@@ -11,12 +11,18 @@ class Database {
     lateinit var userPhoneNumber: String
     lateinit var userPassword: String
     lateinit var typeOfRegister: String
+    var verifyType = "reg"
+    var isFirstStart = true
+    var code = "000000"
     lateinit var token: AccessToken
     lateinit var sid: String
-    var timer = "20"
     lateinit var tempToken: TempToken
+
+    var timer = "20"
     var remainingTime = 0
     var isTimeLeft = false
+    var message = "20"
+    var status = "20"
 
 
     fun setTempTokenData(temp: TempToken){
@@ -25,6 +31,8 @@ class Database {
             timer = temp.add_info
         }
         sid = temp.sid
+        message = temp.message
+        status = temp.status
     }
 
     fun getClientInfo(): Any{

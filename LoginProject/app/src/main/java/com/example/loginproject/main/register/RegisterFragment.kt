@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
                     findNavController().navigate(RegisterFragmentDirections.toConfirm())
                 }else
                     if(db.checkForSignUpType(type).equals("PHONE")){
-
+                        db.verifyType = "reg"
                         findNavController().navigate(RegisterFragmentDirections.toVerify())
                     }else{
                         tvError.text = "Enter correct email or phone number"
@@ -71,6 +71,8 @@ class RegisterFragment : Fragment() {
         openURL.data = Uri.parse(url)
         startActivity(openURL)
     }
+//------------------------------------------CHANGE DESIGN-------------------------------------------
+
     fun termsTextDesign(){
         val spanned = SpannableString ("I agree with terms and conditions")
         val clickableSpan = object : ClickableSpan() {
@@ -94,11 +96,6 @@ class RegisterFragment : Fragment() {
         if(MainActivity.db.clientInfo.buttonColor?.type=="gradient"){
             val gradientDrawable = GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
-//                intArrayOf(
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[0]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[1]),
-//                    Color.parseColor(db.clientInfo.buttonColor!!.colors[2])
-//                )
                 MainActivity.db.clientInfo.buttonColor!!.colors.filter { it.isNotBlank() }.map { Color.parseColor(it) }.toIntArray()
             )
             btnNext.background = gradientDrawable

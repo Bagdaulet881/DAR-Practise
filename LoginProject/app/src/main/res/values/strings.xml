@@ -6,5 +6,6 @@
     <string name="hintLogin">Email or Phone Number</string>
     <string name="hintPassword">Password</string>
     <string name="termsConditions">I agree with <u>terms and conditions</u></string>
+    <string name="haveAcc">Have an account? <u>Sign in</u></string>
 
 </resources>

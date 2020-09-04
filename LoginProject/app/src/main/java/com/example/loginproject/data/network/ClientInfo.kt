@@ -21,8 +21,10 @@ data class AccessToken(
 data class TempToken(
     @SerializedName("redirect_uri") val uri: String = "",
     @SerializedName("sid") val sid: String = "",
-    @SerializedName("add_info") val add_info: String = ""
-) : Parcelable
+    @SerializedName("add_info") val add_info: String = "",
+    @SerializedName("message") val message: String = "",
+    @SerializedName("status") val status: String = ""
+    ) : Parcelable
 @Parcelize
 data class TempToken2(
     @SerializedName("redirect_uri") val uri: String = "",

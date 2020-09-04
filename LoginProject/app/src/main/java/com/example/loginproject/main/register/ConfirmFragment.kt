@@ -23,10 +23,12 @@ import com.example.loginproject.MainActivity.Companion.db
 
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.RegView
+import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.SmsCodeRequestBody
 import com.example.loginproject.data.network.TempToken
 import com.example.loginproject.data.presenter.RegPresenter
+import com.example.loginproject.data.presenter.ResetPresenter
 import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_confirm.*
 import kotlinx.android.synthetic.main.fragment_confirm.btnNext
@@ -36,9 +38,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 
-class ConfirmFragment : Fragment() , RegView{
+class ConfirmFragment : Fragment() , RegView, ResetView{
     val presenter = RegPresenter(this)
-
+    val presenterReset = ResetPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,19 +58,39 @@ class ConfirmFragment : Fragment() , RegView{
         super.onViewCreated(view, savedInstanceState)
         changeDesign()
         btnNext.setOnClickListener{
-            if(checkForPassword(etCreatePass1.text.toString(),etCreatePass2.text.toString())){
-                db.userPassword = etCreatePass1.text.toString()
-                if(db.typeOfRegister.equals("PHONE")){
-                    presenter.registerWithPwd(db.sid, etCreatePass1.text.toString())
-                    Log.i("MSG","presenter register with PASSWORD")
-                    Toast.makeText(context, db.userPhoneNumber + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
+            if(etCreatePass1.text.isNotEmpty()){
+                if(checkForPassword(etCreatePass1.text.toString(),etCreatePass2.text.toString())){
+                    db.userPassword = etCreatePass1.text.toString()
+
+                    if(db.typeOfRegister.equals("PHONE")){
+                        if(db.verifyType =="reset"){
+                            presenterReset.updatePassword(db.code, db.userPassword)
+                            Log.i("MSG","password updated")
+                        }else{
+                            presenter.registerWithPwd(db.sid, etCreatePass1.text.toString())
+                            Log.i("MSG","presenter register with PASSWORD")
+                            Toast.makeText(context, db.userPhoneNumber + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
+                        }
+                    }else{
+                        if(db.verifyType =="reset"){
+                            presenterReset.updatePassword(db.code, db.userPassword)
+                            Log.i("MSG","password updated")
+                        }else {
+                            presenter.signUp(db.userEmail, db.userPassword)
+                            Log.i("MSG", "presenter signup")
+                            Toast.makeText(
+                                context,
+                                db.userEmail + " - " + db.userPassword,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
                 }else{
-                    presenter.signUp(db.userEmail, db.userPassword)
-                    Log.i("MSG","presenter singup")
-                    Toast.makeText(context, db.userEmail + " - " + db.userPassword, Toast.LENGTH_SHORT).show()
+                    view.tvError.text = "Check your password"
                 }
             }else{
-                view.tvError.text = "Check your password"
+                view.tvError.text = "Field cannot be empty"
             }
         }
         etCreatePass1.setOnTouchListener(View.OnTouchListener { v, event ->
@@ -131,6 +153,16 @@ class ConfirmFragment : Fragment() , RegView{
     override fun registerWithPassword(token: AccessToken) {
         Log.i("MSG", "Phone Number registered w/ password token-> " + token)
 //      no needed
+    }
+
+    override fun response(str: String) {
+        if (str == "updated"){
+            if (db.typeOfRegister.equals("PHONE")){
+                Toast.makeText(context, "Password for user " + db.userPhoneNumber + " updated.", Toast.LENGTH_SHORT).show()
+            }else
+                Toast.makeText(context, "Password for user " + db.userEmail + " updated.", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(ConfirmFragmentDirections.toLogin())
+        }
     }
 
     override fun dataFlowWait() {

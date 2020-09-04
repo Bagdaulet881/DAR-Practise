@@ -1,12 +1,12 @@
 package com.example.loginproject
 
 import java.util.*
+import kotlin.reflect.typeOf
 
 fun saveTimer(){
-    var date = Calendar.getInstance()
-    var time = date.timeInMillis
-    var future = time + 2*60000
-    println(time)
+    var min = null
+    var minStr = min.toString()
+    println(minStr)
 }
 
 fun main(){
