@@ -42,14 +42,16 @@ class ResetFragment : Fragment(), ResetView {
         changeDesign()
         btnReset.setOnClickListener{
             val type = view.etUsername.text.toString()
-            if(MainActivity.db.checkForSignUpType(type).equals("EMAIL")){
-                presenter.resetRequest("email", db.userEmail)
-            }else
-                if(MainActivity.db.checkForSignUpType(type).equals("PHONE")){
-                    presenter.resetRequest("phone_number", db.userPhoneNumber)
-                }else{
-                    view.tvError.text = "Enter correct email or phone number"
-                }
+            if(!db.isTimeLeft){
+                if(MainActivity.db.checkForSignUpType(type).equals("EMAIL")){
+                    presenter.resetRequest("email", db.userEmail)
+                }else
+                    if(MainActivity.db.checkForSignUpType(type).equals("PHONE")){
+                        presenter.resetRequest("phone_number", db.userPhoneNumber)
+                    }else{
+                        view.tvError.text = "Enter correct email or phone number"
+                    }
+            }
         }
         tvSignin.setOnClickListener{
             findNavController().navigate(ResetFragmentDirections.toLogin())

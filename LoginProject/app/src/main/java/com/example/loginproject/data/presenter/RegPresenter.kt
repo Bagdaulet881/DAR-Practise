@@ -27,6 +27,7 @@ class RegPresenter(var view: RegView?) {
 
             },{
                 it.printStackTrace()
+                view?.handleError(it.message.toString())
             })
         disposable.add(info)
     }

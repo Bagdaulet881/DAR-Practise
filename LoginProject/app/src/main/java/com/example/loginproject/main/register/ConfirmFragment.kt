@@ -166,11 +166,13 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
     }
 
     override fun dataFlowWait() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun handleError(type: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if(type.contains("403")){
+            view?.tvError?.text =   db.userEmail + " user already exists"
+        }
     }
 
 
