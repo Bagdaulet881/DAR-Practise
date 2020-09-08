@@ -54,5 +54,6 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.1.0"
 //    ava
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
 
 }

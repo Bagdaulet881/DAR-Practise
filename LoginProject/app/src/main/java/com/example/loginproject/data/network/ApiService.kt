@@ -79,16 +79,21 @@ interface ApiService {
 // 2 CONFIRM with OTP DONE
     @POST("api/v1/oauth/password/reset/verify")
     fun resetVerify(
+        @Query("sid") sid: String,
         @Query("code") code: String,
         @Query("client_id") client_id: String
     ):Observable<TempToken>
 // 3
-    @FormUrlEncoded
+    @Headers("Content-type:application/json")
     @PUT("api/v1/oauth/password/reset")
     fun updatePassword(
-        @Query("code") code: String,
-        @Field("client_id") clientId: String?,
-        @Field("new_password") newPassword: String?
-        ):Observable<TempToken>
+        @Query("sid") sid: String,
+        @Body newPwd: NewPasswordBody
+    ):Observable<TempToken>
+//    profile
+    @GET("/api/v1/oauth/profile")
+    fun getUserInfo(
+        @Header("Authorization") Authorization: String
+    ): Observable<UserInfo>
 }
 

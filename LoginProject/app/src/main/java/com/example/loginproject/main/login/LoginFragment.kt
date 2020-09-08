@@ -4,11 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.View.OnTouchListener
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -20,17 +17,22 @@ import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.fragment_login.*
 import androidx.navigation.fragment.findNavController
+import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AccessToken
+import com.example.loginproject.data.network.UserInfo
+import com.example.loginproject.data.presenter.ProfilePresenter
 import com.example.loginproject.main.register.RegisterFragmentDirections
 import kotlinx.android.synthetic.main.fragment_login.btnSignin
 import kotlinx.android.synthetic.main.fragment_login.tvError
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 
-class LoginFragment : Fragment(), LoginView {
+class LoginFragment : Fragment(), LoginView, ProfileView {
 
     val presenter = LoginPresenter(this)
+    val presenterProfile = ProfilePresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,6 +48,10 @@ class LoginFragment : Fragment(), LoginView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.progressBar.visibility = View.VISIBLE
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         presenter.getClientInfo()
         //touch listener for showPassword
 
@@ -95,13 +101,27 @@ class LoginFragment : Fragment(), LoginView {
         Log.i("MSG", clt.toString())
         db.setClientInfo(clt)
         changeDesign()
-
+        activity?.window?.clearFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        progressBar.visibility = View.GONE
     }
 
     override fun login(token: AccessToken) {
         db.token = token
         Log.i("MSG", "logges success->" + token)
         Toast.makeText(context, "logged in successfully", Toast.LENGTH_SHORT).show()
+        presenterProfile.userInfo(db.token.tokenType + " " + db.token.accessToken)
+    }
+
+    override fun response(userInfo: UserInfo) {
+        db.userInfo = userInfo
+        db.haveUserInfo = true
+        Log.i("MSG", "userInfo success->" + userInfo)
+        findNavController().navigate(LoginFragmentDirections.toProfile())
+    }
+
+    override fun dataFlowWait() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun handleError(type: String) {
@@ -111,13 +131,17 @@ class LoginFragment : Fragment(), LoginView {
             if(type.contains("403")){
                 tvError.text = "Wrong password or pin"
             }else
-                tvError.text = "Wrong input value"
+                if(type.contains("connectionError")){
+                    tvError.text = "Check your internet connection"
+                }else
+                tvError.text = "error type " + type
         Log.i("MSG", "logged error" + type)
 
     }
 
     override fun onDestroy() {
         presenter.destroy()
+        presenterProfile.destroy()
         super.onDestroy()
     }
 //------------------------------------------CHANGE DESIGN-------------------------------------------

@@ -51,6 +51,8 @@ class ResetFragment : Fragment(), ResetView {
                     }else{
                         view.tvError.text = "Enter correct email or phone number"
                     }
+            }else{
+                findNavController().navigate(ResetFragmentDirections.toVerify())
             }
         }
         tvSignin.setOnClickListener{

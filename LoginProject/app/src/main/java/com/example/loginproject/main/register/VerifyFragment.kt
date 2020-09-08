@@ -102,7 +102,7 @@ class VerifyFragment : Fragment() , RegView, ResetView{
     fun verifyCode(sid:String, code: String){
 
         if(db.verifyType == "reset"){
-            presenterReset.resetVerifyCode(code)
+            presenterReset.resetVerifyCode(sid,code)
         }else
             if(db.verifyType == "reg"){
                 presenter.verifyCode(sid, code)
@@ -112,7 +112,7 @@ class VerifyFragment : Fragment() , RegView, ResetView{
     override fun signUp(token: AccessToken) {
         Log.i("MSG", "signUp SID " + token)
     }
-
+//this response for register phone w pwd
     override fun phoneVerify(temp: TempToken) {
         Log.i("MSG","VERIFY " + temp)
         timer.cancel()
@@ -125,7 +125,7 @@ class VerifyFragment : Fragment() , RegView, ResetView{
     override fun registerWithPassword(token: AccessToken) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
+//this response for reset pwd
     override fun response(str:String) {
 
         if(str == "verified"){

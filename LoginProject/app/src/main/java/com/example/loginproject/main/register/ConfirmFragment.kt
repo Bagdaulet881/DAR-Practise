@@ -64,8 +64,8 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
 
                     if(db.typeOfRegister.equals("PHONE")){
                         if(db.verifyType =="reset"){
-                            presenterReset.updatePassword(db.code, db.userPassword)
-                            Log.i("MSG","password updated")
+                            presenterReset.updatePassword(db.sid, db.userPassword)
+                            Log.i("MSG","password updated" + db.sid + " " + db.userPassword)
                         }else{
                             presenter.registerWithPwd(db.sid, etCreatePass1.text.toString())
                             Log.i("MSG","presenter register with PASSWORD")
@@ -73,7 +73,7 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
                         }
                     }else{
                         if(db.verifyType =="reset"){
-                            presenterReset.updatePassword(db.code, db.userPassword)
+                            presenterReset.updatePassword(db.sid, db.userPassword)
                             Log.i("MSG","password updated")
                         }else {
                             presenter.signUp(db.userEmail, db.userPassword)
@@ -172,7 +172,12 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
     override fun handleError(type: String) {
         if(type.contains("403")){
             view?.tvError?.text =   db.userEmail + " user already exists"
-        }
+        }else
+            if(type.contains("500")){
+                view?.tvError?.text = "server internal error"
+            }else
+            view?.tvError?.text =  type
+
     }
 
 
@@ -206,6 +211,9 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
             btnNext.background = gradientDrawable
         }else{
             btnNext.setBackgroundColor(Color.parseColor(MainActivity.db.clientInfo.buttonColor!!.colors[0]))
+        }
+        if(db.verifyType=="reset"){
+            btnNext.text = "UPDATE PASSWORD"
         }
     }
     fun changeDesign() {

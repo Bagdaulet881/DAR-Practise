@@ -25,6 +25,7 @@ data class TempToken(
     @SerializedName("message") val message: String = "",
     @SerializedName("status") val status: String = ""
     ) : Parcelable
+
 @Parcelize
 data class TempToken2(
     @SerializedName("redirect_uri") val uri: String = "",
@@ -43,7 +44,26 @@ data class ClientInfo (
     @SerializedName("terms_condition_url") val termsConditionUrl: String?,
     @SerializedName("sign_up_type") val signUpType: ArrayList<SignUpType>?
 ) : Parcelable
-
+@Parcelize
+data class UserInfo (
+    @SerializedName("id") val id: String,
+    @SerializedName("bucket_id") val bucket_id: String,
+    @SerializedName("brand_id") val brand_id: String,
+    @SerializedName("email") val email: String,
+    @SerializedName("email_verified") val email_verified: String?,
+    @SerializedName("phone_number") val phone_number: String,
+    @SerializedName("phone_number_verified") val phone_number_verified: String,
+    @SerializedName("pin") val pin: String?,
+    @SerializedName("password") val password: String?,
+    @SerializedName("mfa_type") val mfa_type: String?,
+    @SerializedName("avatar") val avatar: AvatarInfo?
+) : Parcelable
+@Parcelize
+data class AvatarInfo (
+    @SerializedName("original") val original: String,
+    @SerializedName("normal") val normal: String,
+    @SerializedName("thumbnail") val thumbnail: String
+) : Parcelable
 @Parcelize
 data class ButtonColor(
     @SerializedName("type") val type: String,
@@ -70,6 +90,11 @@ data class SmsCodeRequestBody(
     val code: String
 ) : Parcelable
 
+@Parcelize
+data class NewPasswordBody(
+    @SerializedName("client_id") val client_id: String,
+    @SerializedName("new_password") val new_password: String
+) : Parcelable
 @Parcelize
 data class PasswordRequestBody(
     val password: String

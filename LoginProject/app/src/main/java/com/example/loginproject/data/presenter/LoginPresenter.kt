@@ -19,6 +19,7 @@ class LoginPresenter(var view: LoginView?) {
                 view?.clientInfo(clt)
             },{
                 it.printStackTrace()
+                view?.handleError("connectionError")
             })
         disposable.add(info)
     }
@@ -38,6 +39,7 @@ class LoginPresenter(var view: LoginView?) {
             })
         disposable.add(info)
     }
+
     fun destroy(){
         disposable.dispose()
         view = null

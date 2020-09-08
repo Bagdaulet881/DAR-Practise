@@ -3,6 +3,7 @@ package com.example.loginproject.data
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.network.TempToken
+import com.example.loginproject.data.network.UserInfo
 import java.util.regex.Pattern
 
 class Database {
@@ -17,7 +18,8 @@ class Database {
     lateinit var token: AccessToken
     lateinit var sid: String
     lateinit var tempToken: TempToken
-
+    lateinit var userInfo: UserInfo
+    var haveUserInfo = false
     var timer = "20"
     var remainingTime = 0
     var isTimeLeft = false

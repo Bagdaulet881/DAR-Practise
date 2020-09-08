@@ -36,12 +36,16 @@ class LoginRemoteDataSource {
     fun requestOTP(reset_option:String, username:String):Observable<TempToken>{
         return API.apiService.requestOTP(client_id,reset_option,username)
     }
-    fun resetVerify(code:String):Observable<TempToken>{
-        return API.apiService.resetVerify(code, client_id)
+    fun resetVerify(sid: String, code:String):Observable<TempToken>{
+        return API.apiService.resetVerify(sid, code, client_id)
     }
-    fun updatePassword(code:String, newPassword:String):Observable<TempToken>{
-        return API.apiService.updatePassword(code, client_id, newPassword)
-    }
+    fun updatePassword(sid:String, newPassword:String):Observable<TempToken>{
 
+        return API.apiService.updatePassword(sid, NewPasswordBody(client_id, newPassword))
+    }
+//-------------------------------------------PROFILE------------------------------------------------
+    fun getUserInfo(authorization:String):Observable<UserInfo>{
+        return API.apiService.getUserInfo(authorization)
+    }
 
 }

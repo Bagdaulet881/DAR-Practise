@@ -28,12 +28,13 @@ class ResetPresenter(var view: ResetView?){
         disposable.add(info)
     }
 
-    fun resetVerifyCode(code:String){
-        val info = repository.resetVerifyCode(code)
+    fun resetVerifyCode(sid:String, code:String){
+        val info = repository.resetVerifyCode(sid,code)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.i("MSG","resetVerifyCode TRUE ")
+                Log.i("MSG","resetVerifyCode TRUE " + it)
+                db.setTempTokenData(it)
                 view?.response("verified")
             },{
                 it.printStackTrace()
@@ -43,8 +44,8 @@ class ResetPresenter(var view: ResetView?){
         disposable.add(info)
     }
 
-    fun updatePassword(code:String, newPassword:String){
-        val info = repository.updatePassword(code, newPassword)
+    fun updatePassword(sid:String, newPassword:String){
+        val info = repository.updatePassword(sid, newPassword)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -53,7 +54,7 @@ class ResetPresenter(var view: ResetView?){
             },{
                 it.printStackTrace()
                 view?.handleError(it.message.toString())
-                Log.i("MSG","password updated false")
+                Log.i("MSG","password updated false" + it.message.toString() + "sid used " + sid + " " + newPassword)
 
             })
         disposable.add(info)
