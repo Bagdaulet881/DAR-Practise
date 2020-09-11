@@ -11,7 +11,12 @@ data class AccessToken(
     @SerializedName("access_token") val accessToken: String = "",
     @SerializedName("refresh_token") val refreshToken: String? = null,
     @SerializedName("expires_in") val expiresIn: Int? = null,
-    @SerializedName("expiration_date") val expirationDate: Calendar? = null
+    @SerializedName("expiration_date") val expirationDate: Calendar? = null,
+    @SerializedName("id_token") val id_token: String = "",
+    @SerializedName("redirect_uri") val redirect_uri: String = "",
+    @SerializedName("sid") val sid: String = ""
+
+
 ) : Parcelable {
     fun isExpired(): Boolean =
         expirationDate != null &&
@@ -56,7 +61,7 @@ data class UserInfo (
     @SerializedName("pin") val pin: String?,
     @SerializedName("password") val password: String?,
     @SerializedName("mfa_type") val mfa_type: String?,
-    @SerializedName("avatar") val avatar: AvatarInfo?
+    @SerializedName("avatar") var avatar: AvatarInfo?
 ) : Parcelable
 @Parcelize
 data class AvatarInfo (
@@ -106,3 +111,9 @@ enum class SignUpType : Parcelable {
     @SerializedName("phone_number") PHONE,
     @SerializedName("email") EMAIL
 }
+@Parcelize
+data class resetBody(
+    @SerializedName("client_id") val clientId: String,
+    @SerializedName("reset_option") val clientSecret: String,
+    @SerializedName("username") val username: String
+) : Parcelable

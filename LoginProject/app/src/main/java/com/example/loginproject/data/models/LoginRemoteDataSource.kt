@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.loginproject.data.network.*
 import io.reactivex.Completable
 import io.reactivex.Observable
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.util.*
 
 class LoginRemoteDataSource {
@@ -34,7 +36,7 @@ class LoginRemoteDataSource {
 //-------------------------------------------RESET--------------------------------------------------
 
     fun requestOTP(reset_option:String, username:String):Observable<TempToken>{
-        return API.apiService.requestOTP(client_id,reset_option,username)
+        return API.apiService.requestOTP(resetBody(client_id,reset_option,username))
     }
     fun resetVerify(sid: String, code:String):Observable<TempToken>{
         return API.apiService.resetVerify(sid, code, client_id)
@@ -47,5 +49,13 @@ class LoginRemoteDataSource {
     fun getUserInfo(authorization:String):Observable<UserInfo>{
         return API.apiService.getUserInfo(authorization)
     }
-
+    fun setUserAva(multipart: MultipartBody.Part, authorization:String):Observable<AvatarInfo>{
+        return API.apiService.setUserAva(multipart, authorization)
+    }
+//    fun setUserAva(multipart: MultipartBody.Part,folder:RequestBody, name:RequestBody, authorization:String):Observable<AvatarInfo>{
+//        return API.apiService.setUserAva(authorization, multipart)
+//    }
+    fun setUserAva2(multipart: HashMap<String, RequestBody>, authorization:String):Observable<AvatarInfo>{
+        return API.apiService.setUserAva2(authorization, multipart)
+    }
 }

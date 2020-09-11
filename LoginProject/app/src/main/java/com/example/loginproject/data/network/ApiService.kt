@@ -5,8 +5,11 @@ import com.google.gson.annotations.SerializedName
 import io.reactivex.Completable
 import io.reactivex.Observable
 import kotlinx.android.parcel.Parcelize
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.*
 import java.util.*
+import kotlin.collections.HashMap
 
 interface ApiService {
 
@@ -33,7 +36,7 @@ interface ApiService {
     fun revokeAccessToken(
         @Body body: RevokeAccessTokenBody?
     ): Completable
-//TODO
+//T
     @POST("api/v1/oauth/signup")
     fun signUp(
         @Header("Content-Type") contentType: String,
@@ -44,7 +47,7 @@ interface ApiService {
         @Header("Content-Type") contentType: String,
         @Body body: NewUserBody
     ) : Observable<TempToken>
-//TODO
+//
     @POST("api/v1/oauth/signup/phone/verify")
     fun phoneVerify(
         @Query("sid") sid: String,
@@ -55,7 +58,7 @@ interface ApiService {
         @Query("sid") sid: String,
         @Body smsCodeBody: SmsCodeRequestBody
     ):Observable<TempToken>
-//TODO
+//T
     @POST("api/v1/oauth/register")
     fun registerWithPassword(
         @Query("sid") sid: String,
@@ -69,12 +72,13 @@ interface ApiService {
 
 
 // 1
-    @FormUrlEncoded
+//    @FormUrlEncoded
     @POST("api/v1/oauth/password/reset")
     fun requestOTP(
-        @Field("client_id") clientId: String?,
-        @Field("reset_option") type: String?,
-        @Field("username") username: String?
+//        @Field("client_id") client_id: String?,
+//        @Field("reset_option") reset_option: String?,
+//        @Field("username") username: String?
+        @Body rst: resetBody
         ):Observable<TempToken>
 // 2 CONFIRM with OTP DONE
     @POST("api/v1/oauth/password/reset/verify")
@@ -95,5 +99,19 @@ interface ApiService {
     fun getUserInfo(
         @Header("Authorization") Authorization: String
     ): Observable<UserInfo>
+//profile ava
+    @Multipart
+    @POST("/api/v1/oauth/profile/avatar")
+    fun setUserAva(
+        @Part image: MultipartBody.Part,
+        @Header("Authorization") Authorization: String
+    ): Observable<AvatarInfo>
+
+    @Multipart
+    @POST("/api/v1/oauth/profile/avatar")
+    fun setUserAva2(
+        @Header("Authorization") Authorization: String,
+        @PartMap map: HashMap<String, RequestBody>
+    ): Observable<AvatarInfo>
 }
 

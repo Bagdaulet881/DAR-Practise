@@ -14,21 +14,22 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity
-
 import com.example.loginproject.R
 import kotlinx.android.synthetic.main.fragment_register.*
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.util.Log
 import android.widget.Toast
-import androidx.core.text.buildSpannedString
 import com.example.loginproject.MainActivity.Companion.db
+import com.example.loginproject.data.interfaces.LoginView
+import com.example.loginproject.data.network.AccessToken
+import com.example.loginproject.data.network.ClientInfo
+import com.example.loginproject.data.presenter.LoginPresenter
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : Fragment(), LoginView {
+    val presenter = LoginPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +53,13 @@ class RegisterFragment : Fragment() {
             val type = etUsername.text.toString()
             if(checkbox.isChecked){
                 if(db.checkForSignUpType(type).equals("EMAIL")){
-                    findNavController().navigate(RegisterFragmentDirections.toConfirm())
+                    db.verifyType = "reg"
+                    presenter.login(null,"password",db.userEmail,"wssdjhdbsfai",null)
                 }else
                     if(db.checkForSignUpType(type).equals("PHONE")){
                         db.verifyType = "reg"
-                        findNavController().navigate(RegisterFragmentDirections.toVerify())
+                        Log.i("MSG", "phone type")
+                        presenter.login(null,"password",db.userPhoneNumber,"wssdjhdbsfai",null)
                     }else{
                         tvError.text = "Enter correct email or phone number"
                     }
@@ -70,6 +73,17 @@ class RegisterFragment : Fragment() {
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = Uri.parse(url)
         startActivity(openURL)
+    }
+
+    override fun handleError(type: String) {
+        if(type.contains("404")){
+            if(db.typeOfRegister == "EMAIL"){
+                findNavController().navigate(RegisterFragmentDirections.toConfirm())
+            }else
+                findNavController().navigate(RegisterFragmentDirections.toVerify())
+        }else{
+            tvError.text = "user already exists."
+        }
     }
 //------------------------------------------CHANGE DESIGN-------------------------------------------
 
@@ -110,5 +124,13 @@ class RegisterFragment : Fragment() {
 
         regpage.setBackgroundColor(
             Color.parseColor(MainActivity.db.clientInfo.backgroundColor))
+    }
+
+    override fun clientInfo(clt: ClientInfo) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun login(token: AccessToken) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

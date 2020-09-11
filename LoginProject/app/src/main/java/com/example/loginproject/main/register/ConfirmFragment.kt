@@ -22,25 +22,27 @@ import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 
 import com.example.loginproject.R
+import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.interfaces.RegView
 import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
-import com.example.loginproject.data.network.SmsCodeRequestBody
+import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.TempToken
+import com.example.loginproject.data.network.UserInfo
+import com.example.loginproject.data.presenter.ProfilePresenter
 import com.example.loginproject.data.presenter.RegPresenter
 import com.example.loginproject.data.presenter.ResetPresenter
-import io.reactivex.Completable
 import kotlinx.android.synthetic.main.fragment_confirm.*
 import kotlinx.android.synthetic.main.fragment_confirm.btnNext
 import kotlinx.android.synthetic.main.fragment_confirm.imageViewReg
 import kotlinx.android.synthetic.main.fragment_confirm.view.*
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
-class ConfirmFragment : Fragment() , RegView, ResetView{
+class ConfirmFragment : Fragment() , RegView, ResetView, ProfileView{
     val presenter = RegPresenter(this)
     val presenterReset = ResetPresenter(this)
+    val presenterProfile = ProfilePresenter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -143,7 +145,7 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
             Toast.makeText(context, "Registered as " + db.userPhoneNumber , Toast.LENGTH_SHORT).show()
         }else
             Toast.makeText(context, "Registered as " + db.userEmail , Toast.LENGTH_SHORT).show()
-//        findNavController().navigate(ConfirmFragmentDirections.toEnd())
+        presenterProfile.userInfo(db.token.tokenType + " " + db.token.accessToken)
     }
 
     override fun phoneVerify(temp: TempToken) {
@@ -163,6 +165,15 @@ class ConfirmFragment : Fragment() , RegView, ResetView{
                 Toast.makeText(context, "Password for user " + db.userEmail + " updated.", Toast.LENGTH_SHORT).show()
             findNavController().navigate(ConfirmFragmentDirections.toLogin())
         }
+    }
+
+    override fun userResponse(userInfo: UserInfo) {
+        db.userInfo = userInfo
+        findNavController().navigate(ConfirmFragmentDirections.toEnd())
+    }
+
+    override fun avaResponse(avatarInfo: AvatarInfo) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dataFlowWait() {

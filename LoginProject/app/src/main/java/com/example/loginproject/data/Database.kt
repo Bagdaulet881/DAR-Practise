@@ -15,10 +15,12 @@ class Database {
     var verifyType = "reg"
     var isFirstStart = true
     var code = "000000"
+
     lateinit var token: AccessToken
-    lateinit var sid: String
+    var sid = ""
     lateinit var tempToken: TempToken
     lateinit var userInfo: UserInfo
+
     var haveUserInfo = false
     var timer = "20"
     var remainingTime = 0
@@ -36,10 +38,13 @@ class Database {
         message = temp.message
         status = temp.status
     }
-
-    fun getClientInfo(): Any{
-        return clientInfo
+    fun setAccessToken(acc: AccessToken){
+        token = acc
+        if(acc.sid.isNotEmpty()){
+            sid = acc.sid
+        }
     }
+
     fun setClientInfo(clt: Any){
         clientInfo = clt as ClientInfo
     }

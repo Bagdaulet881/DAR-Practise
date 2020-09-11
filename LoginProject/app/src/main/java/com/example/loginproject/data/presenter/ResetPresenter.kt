@@ -13,6 +13,7 @@ class ResetPresenter(var view: ResetView?){
     val disposable = CompositeDisposable()
 
     fun resetRequest(resetOption:String,username:String){
+        Log.i("MSG", resetOption + " " + username)
         val info = repository.resetRequestOtp(resetOption, username)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

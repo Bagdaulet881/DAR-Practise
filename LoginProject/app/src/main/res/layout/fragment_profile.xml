@@ -118,24 +118,33 @@
             app:layout_constraintStart_toStartOf="@+id/ivAvatar2"
             app:layout_constraintTop_toTopOf="@+id/ivAvatar2"
             app:layout_constraintVertical_bias="0.384" />
-        <Button
-            android:id="@+id/buttonCamera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
-            android:text="Camera"
-            app:layout_constraintEnd_toEndOf="@+id/ivAvatar"
-            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
-            app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
 
         <Button
-            android:id="@+id/buttonGallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gallery"
-            app:layout_constraintEnd_toEndOf="@+id/buttonCamera"
-            app:layout_constraintStart_toStartOf="@+id/buttonCamera"
-            app:layout_constraintTop_toBottomOf="@+id/buttonCamera" />
+            android:id="@+id/btnSave"
+            android:layout_width="0.0dip"
+            android:layout_height="75.0dip"
+            android:layout_marginTop="88dp"
+            android:background="@android:color/background_dark"
+            android:layout_marginStart="24.0dip"
+            android:layout_marginEnd="24.0dip"
+            android:text="SAVE"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
+        <Button
+            android:id="@+id/btnChangePwd"
+            android:layout_width="0.0dip"
+            android:layout_height="75.0dip"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/background_dark"
+            android:layout_marginStart="24.0dip"
+            android:layout_marginEnd="24.0dip"
+            android:text="Change password"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSave" />
 
         <TextView
             android:id="@+id/showText"
@@ -144,18 +153,10 @@
             android:textColor="@android:color/white"
             android:layout_marginTop="62dp"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/buttonGallery"
-            app:layout_constraintStart_toStartOf="@+id/buttonGallery"
-            app:layout_constraintTop_toBottomOf="@+id/buttonGallery" />
+            app:layout_constraintEnd_toEndOf="@+id/btnChangePwd"
+            app:layout_constraintStart_toStartOf="@+id/btnChangePwd"
+            app:layout_constraintTop_toBottomOf="@+id/btnChangePwd" />
 
-        <com.theartofdev.edmodo.cropper.CropImageView
-            android:id="@+id/cropImageView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

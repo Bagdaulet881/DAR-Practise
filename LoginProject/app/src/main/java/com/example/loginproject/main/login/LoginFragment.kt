@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import androidx.navigation.fragment.findNavController
 import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AccessToken
+import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.UserInfo
 import com.example.loginproject.data.presenter.ProfilePresenter
 import com.example.loginproject.main.register.RegisterFragmentDirections
@@ -97,6 +98,8 @@ class LoginFragment : Fragment(), LoginView, ProfileView {
         }
 
     }
+//------------------------------------------INTERFACE VIEW------------------------------------------
+
     override fun clientInfo(clt: ClientInfo) {
         Log.i("MSG", clt.toString())
         db.setClientInfo(clt)
@@ -107,17 +110,21 @@ class LoginFragment : Fragment(), LoginView, ProfileView {
     }
 
     override fun login(token: AccessToken) {
-        db.token = token
+        db.setAccessToken(token)
         Log.i("MSG", "logges success->" + token)
         Toast.makeText(context, "logged in successfully", Toast.LENGTH_SHORT).show()
         presenterProfile.userInfo(db.token.tokenType + " " + db.token.accessToken)
     }
 
-    override fun response(userInfo: UserInfo) {
+    override fun userResponse(userInfo: UserInfo) {
         db.userInfo = userInfo
         db.haveUserInfo = true
         Log.i("MSG", "userInfo success->" + userInfo)
         findNavController().navigate(LoginFragmentDirections.toProfile())
+    }
+
+    override fun avaResponse(avatarInfo: AvatarInfo) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dataFlowWait() {

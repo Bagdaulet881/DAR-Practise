@@ -4,6 +4,8 @@ import android.util.Log
 import com.example.loginproject.data.network.*
 import io.reactivex.Completable
 import io.reactivex.Observable
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 class LoginRepository {
     val remoteDataSource = LoginRemoteDataSource()
@@ -45,5 +47,16 @@ class LoginRepository {
     fun getUserInfo(authorization:String):Observable<UserInfo>{
         return remoteDataSource.getUserInfo(authorization)
     }
-
+    fun setUserInfo(multipart: MultipartBody.Part, authorization:String):Observable<AvatarInfo>{
+        Log.i("MSG", "setUserInfo REPO")
+        return remoteDataSource.setUserAva(multipart, authorization)
+    }
+//    fun setUserInfo(multipart: MultipartBody.Part, folder: RequestBody, name: RequestBody, authorization:String):Observable<AvatarInfo>{
+//        Log.i("MSG", "setUserInfo REPO")
+//        return remoteDataSource.setUserAva(multipart,folder, name, authorization)
+//    }
+    fun setUserInfo2(multipart: HashMap<String, RequestBody>, authorization:String):Observable<AvatarInfo>{
+        Log.i("MSG", "setUserInfo REPO")
+        return remoteDataSource.setUserAva2(multipart, authorization)
+    }
 }

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/toLogin"
             app:destination="@id/LoginFragment"/>
+        <action
+            android:id="@+id/toConfirm"
+            app:destination="@id/ConfirmFragment"/>
         <argument
             android:name="name"
             app:argType="string"
