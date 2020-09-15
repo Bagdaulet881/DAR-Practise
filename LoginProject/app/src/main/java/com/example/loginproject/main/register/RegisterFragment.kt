@@ -23,13 +23,16 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.widget.Toast
 import com.example.loginproject.MainActivity.Companion.db
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.presenter.LoginPresenter
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
-class RegisterFragment : Fragment(), LoginView {
-    val presenter = LoginPresenter(this)
+class RegisterFragment : Fragment(), Contract.LoginView {
+    private val presenter: Contract.LoginPresenter by inject{ parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

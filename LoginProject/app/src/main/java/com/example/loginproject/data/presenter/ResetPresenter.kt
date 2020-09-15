@@ -2,17 +2,20 @@ package com.example.loginproject.data.presenter
 
 import android.util.Log
 import com.example.loginproject.MainActivity.Companion.db
+import com.example.loginproject.data.interfaces.Contract
+import com.example.loginproject.data.interfaces.RepoI
 import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.models.LoginRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class ResetPresenter(var view: ResetView?){
-    val repository = LoginRepository()
-    val disposable = CompositeDisposable()
+class ResetPresenter(var view: Contract.ResetView?,
+                     val disposable: CompositeDisposable,
+                     private val repository: RepoI
+):Contract.ResetPresenter {
 
-    fun resetRequest(resetOption:String,username:String){
+    override fun resetRequest(resetOption:String,username:String){
         Log.i("MSG", resetOption + " " + username)
         val info = repository.resetRequestOtp(resetOption, username)
             .subscribeOn(Schedulers.io())
@@ -29,7 +32,7 @@ class ResetPresenter(var view: ResetView?){
         disposable.add(info)
     }
 
-    fun resetVerifyCode(sid:String, code:String){
+    override fun resetVerifyCode(sid:String, code:String){
         val info = repository.resetVerifyCode(sid,code)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -45,7 +48,7 @@ class ResetPresenter(var view: ResetView?){
         disposable.add(info)
     }
 
-    fun updatePassword(sid:String, newPassword:String){
+    override fun updatePassword(sid:String, newPassword:String){
         val info = repository.updatePassword(sid, newPassword)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -59,5 +62,9 @@ class ResetPresenter(var view: ResetView?){
 
             })
         disposable.add(info)
+    }
+    override fun destroy(){
+        disposable.dispose()
+        view = null
     }
 }

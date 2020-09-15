@@ -17,6 +17,7 @@ import com.example.loginproject.data.network.ClientInfo
 import com.example.loginproject.data.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.fragment_login.*
 import androidx.navigation.fragment.findNavController
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.AvatarInfo
@@ -28,12 +29,15 @@ import kotlinx.android.synthetic.main.fragment_login.tvError
 import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_register.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 
-class LoginFragment : Fragment(), LoginView, ProfileView {
+class LoginFragment : Fragment(), Contract.LoginView, Contract.ProfileView {
 
-    val presenter = LoginPresenter(this)
-    val presenterProfile = ProfilePresenter(this)
+    private val presenter: Contract.LoginPresenter by inject{ parametersOf(this) }
+    private val presenterProfile: Contract.ProfilePresenter by inject{ parametersOf(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

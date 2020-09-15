@@ -3,6 +3,7 @@ package com.example.loginproject.main.reset
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,19 +16,21 @@ import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 
 import com.example.loginproject.R
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.ResetView
-import com.example.loginproject.data.presenter.ResetPresenter
-import com.example.loginproject.main.register.RegisterFragmentDirections
-import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.imageViewReg
 import kotlinx.android.synthetic.main.fragment_reset.*
 import kotlinx.android.synthetic.main.fragment_reset.view.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 /**
  * A simple [Fragment] subclass.
  */
-class ResetFragment : Fragment(), ResetView {
-    val presenter = ResetPresenter(this)
+class ResetFragment : Fragment(), Contract.ResetView {
+    private val presenter: Contract.ResetPresenter by inject{ parametersOf(this) }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +43,16 @@ class ResetFragment : Fragment(), ResetView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         changeDesign()
+//        if(db.typeOfRegister=="PHONE"){
+//            if(db.userPhoneNumber.length>1){
+//                etUsername.text = db.userPhoneNumber as Editable
+//            }
+//        }else
+//            if(db.typeOfRegister=="EMAIL"){
+//                if(db.userEmail.length>1){
+//                    etUsername.text = db.userEmail as Editable
+//                }
+//        }
         btnReset.setOnClickListener{
             val type = view.etUsername.text.toString()
             if(!db.isTimeLeft){

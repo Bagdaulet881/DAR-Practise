@@ -2,7 +2,9 @@ package com.example.loginproject.data.presenter
 
 import android.util.Log
 import com.example.loginproject.MainActivity.Companion.db
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.RegView
+import com.example.loginproject.data.interfaces.RepoI
 import com.example.loginproject.data.models.LoginRepository
 import com.example.loginproject.data.network.TempToken
 import com.example.loginproject.data.network.TempToken2
@@ -12,11 +14,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class RegPresenter(var view: RegView?) {
-    val repository = LoginRepository()
-    val disposable = CompositeDisposable()
+class RegPresenter(var view: Contract.RegView?,
+                   val disposable: CompositeDisposable,
+                   private val repository: RepoI
+):Contract.RegPresenter {
 
-    fun signUp(u:String,p:String?){
+    override fun signUp(u:String,p:String?){
         val info = repository.signUp(u,p)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -31,7 +34,7 @@ class RegPresenter(var view: RegView?) {
             })
         disposable.add(info)
     }
-    fun signUpPhone(u:String){
+    override fun signUpPhone(u:String){
         val info = repository.signUpPhone(u)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -44,7 +47,7 @@ class RegPresenter(var view: RegView?) {
             })
         disposable.add(info)
     }
-    fun verifyCode(sid:String, code:String){
+    override fun verifyCode(sid:String, code:String){
         Log.i("MSG","phone Verified!0" + sid + ", " + code)
 
 
@@ -61,7 +64,7 @@ class RegPresenter(var view: RegView?) {
             })
         disposable.add(info)
     }
-    fun registerWithPwd(sid:String, pwd:String){
+    override fun registerWithPwd(sid:String, pwd:String){
 
         val info = repository.registerWithPwd(sid, pwd)
             .subscribeOn(Schedulers.io())
@@ -74,7 +77,7 @@ class RegPresenter(var view: RegView?) {
             })
         disposable.add(info)
     }
-    fun destroy(){
+    override fun destroy(){
         disposable.dispose()
         view = null
     }

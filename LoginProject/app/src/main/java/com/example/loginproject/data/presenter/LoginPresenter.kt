@@ -1,17 +1,20 @@
 package com.example.loginproject.data.presenter
 
 import android.util.Log
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.LoginView
+import com.example.loginproject.data.interfaces.RepoI
 import com.example.loginproject.data.models.LoginRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class LoginPresenter(var view: LoginView?) {
-    val repository = LoginRepository()
-    val disposable = CompositeDisposable()
+class LoginPresenter(var view: Contract.LoginView?,
+                     val disposable: CompositeDisposable,
+                     private val repository: RepoI
+):Contract.LoginPresenter {
 
-    fun getClientInfo(){
+    override fun getClientInfo(){
         val info = repository.getClientInfo()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -24,7 +27,7 @@ class LoginPresenter(var view: LoginView?) {
         disposable.add(info)
     }
 
-    fun login(code:String?, type:String, username:String, password:String, refreshToken:String?){
+    override fun login(code:String?, type:String, username:String, password:String, refreshToken:String?){
         val info = repository.login(code,type,username,password,refreshToken)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,7 +43,7 @@ class LoginPresenter(var view: LoginView?) {
         disposable.add(info)
     }
 
-    fun destroy(){
+    override fun destroy(){
         disposable.dispose()
         view = null
     }

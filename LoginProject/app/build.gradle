@@ -55,5 +55,11 @@ dependencies {
 //    ava
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+//    Koin for Android
+
+    implementation 'org.koin:koin-android:2.0.1'
+//    implementation 'org.koin:koin-androidx-fragment:2.0.1'
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
+    implementation 'org.koin:koin-androidx-scope:2.0.1'
 
 }

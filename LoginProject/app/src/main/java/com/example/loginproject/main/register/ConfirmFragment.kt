@@ -22,6 +22,7 @@ import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 
 import com.example.loginproject.R
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.interfaces.RegView
 import com.example.loginproject.data.interfaces.ResetView
@@ -36,12 +37,14 @@ import kotlinx.android.synthetic.main.fragment_confirm.*
 import kotlinx.android.synthetic.main.fragment_confirm.btnNext
 import kotlinx.android.synthetic.main.fragment_confirm.imageViewReg
 import kotlinx.android.synthetic.main.fragment_confirm.view.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
 
-class ConfirmFragment : Fragment() , RegView, ResetView, ProfileView{
-    val presenter = RegPresenter(this)
-    val presenterReset = ResetPresenter(this)
-    val presenterProfile = ProfilePresenter(this)
+class ConfirmFragment : Fragment() , Contract.RegView, Contract.ResetView, Contract.ProfileView{
+    private val presenter: Contract.RegPresenter by inject{ parametersOf(this) }
+    private val presenterReset: Contract.ResetPresenter by inject{ parametersOf(this) }
+    private val presenterProfile: Contract.ProfilePresenter by inject{ parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

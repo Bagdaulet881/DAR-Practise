@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -25,14 +26,17 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.UserInfo
 import com.example.loginproject.data.presenter.ProfilePresenter
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_reset.*
 import okhttp3.MediaType
@@ -42,6 +46,8 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileOutputStream
@@ -51,7 +57,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ProfileFragment : Fragment(), ProfileView {
+class ProfileFragment : Fragment(), Contract.ProfileView {
     private val GALLERY_REQUEST_CODE = 1234
     private val AVATAR_CAMERA_PERMISSION_REQUEST = 201
     private val AVATAR_WRITE_PERMISSION_REQUEST = 202
@@ -59,7 +65,8 @@ class ProfileFragment : Fragment(), ProfileView {
     private var selectedPhotoFile: File? = null
     lateinit var imageUri: Uri
 
-    val presenter = ProfilePresenter(this)
+    private val presenter: Contract.ProfilePresenter by inject{ parametersOf(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -70,6 +77,7 @@ class ProfileFragment : Fragment(), ProfileView {
             profilepage.visibility = View.INVISIBLE
             Toast.makeText(context, "haveUserInfo false", Toast.LENGTH_SHORT).show()
         }else{
+            progressBar2.visibility = View.INVISIBLE
             btnSave.visibility = View.INVISIBLE
             btnStart.visibility = View.INVISIBLE
             changeDesign()
@@ -85,12 +93,15 @@ class ProfileFragment : Fragment(), ProfileView {
             imageChooserDialog()
         }
         btnChangePwd.setOnClickListener{
-            if(db.sid.isEmpty()){
-                showText.text = "Server did not give access for sid"
-            }else{
-                db.verifyType = "reset"
-                findNavController().navigate(ProfileFragmentDirections.toConfirm())
-            }
+//            if(db.sid.isEmpty()){
+//                showText.text = "Server did not give access for sid"
+//            }else{
+//                db.verifyType = "reset"
+//                findNavController().navigate(ProfileFragmentDirections.toReset())
+//            }
+            db.verifyType = "reset"
+            findNavController().navigate(ProfileFragmentDirections.toReset())
+
         }
         btnSave.setOnClickListener{
             getPermissionsToWrite()
@@ -132,11 +143,7 @@ class ProfileFragment : Fragment(), ProfileView {
             GALLERY_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
                     data?.data?.let { uri ->
-//                        imageUri = uri
-//                        Log.i("MSG", "gallery req " + imageUri)
-
                         launchImageCrop(uri)
-
                     }
                 }
                 else{
@@ -226,6 +233,10 @@ class ProfileFragment : Fragment(), ProfileView {
         Log.i("MSG", "avarespo " + avatarInfo)
 //        setting new ava
         db.userInfo.avatar = avatarInfo
+        Toast.makeText(getContext(),"New ava saved ",Toast.LENGTH_SHORT).show()
+        activity?.window?.clearFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        progressBar2.visibility = View.GONE
     }
 
     override fun dataFlowWait() {
@@ -270,9 +281,9 @@ class ProfileFragment : Fragment(), ProfileView {
             .setTitle("Change avatar")
             .setAdapter(adapter) { dialog, which ->
                 saveOrGetAvaName(showSavedAvatars().get(which), 1)
-                ivAvatar.setImageURI(getAvaFromStorage(saveOrGetAvaName("current", 2)))
+                imageUri = getAvaFromStorage(saveOrGetAvaName("current", 2))
+                ivAvatar.setImageURI(imageUri)
                 btnSave.visibility = View.VISIBLE
-                Toast.makeText(context, "Current Ava changed", Toast.LENGTH_SHORT).show()
             }
             .create()
             .show()
@@ -286,8 +297,11 @@ class ProfileFragment : Fragment(), ProfileView {
 //        TODO save cropped image
     }
     private fun setImage(uri: Uri){
+        imageUri = uri
         Glide.with(this)
             .load(uri)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .into(ivAvatar)
     }
 
@@ -297,25 +311,23 @@ class ProfileFragment : Fragment(), ProfileView {
         var temp = ivAvatar.drawable
         var myBitmap = (temp as BitmapDrawable).bitmap
         saveAvaLocally(myBitmap)
+        saveAvaToServer()
 ////        TODO
-//        val file = File(selectedPhotoFile!!.path)
-//
-//        Log.i("MSG", "imageUri " + imageUri.path + " " + file.toString())
-//        val req = file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-//        val filePart = MultipartBody.Part.createFormData(
-//            "image",
-//            file.name,
-//            req
-//        )
-//        val folder = "LeadDocuments".toRequestBody("text/plain".toMediaTypeOrNull())
-//        val name = file.name.toRequestBody("text/plain".toMediaTypeOrNull())
-//
-////            val map = HashMap<String, RequestBody>()
-//        // Parsing any Media type file
-////            val requestBody = RequestBody.create("*/*".toMediaTypeOrNull(), file)
-////            map.put("file\"; filename=\"" + file.name + "\"", requestBody)
-//        presenter.userAva(filePart,db.token.tokenType + " " + db.token.accessToken)
-//        Log.i("MSG", "logout")
+
+    }
+    fun saveAvaToServer(){
+        val file = File(imageUri.path)
+        Log.i("MSG", "imageUri " + imageUri.path + " " + file.toString())
+        val filePart = MultipartBody.Part.createFormData(
+            "fileupload",
+            file.name,
+            RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        )
+        progressBar2.visibility = View.VISIBLE
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        presenter.userAva(filePart,db.token.tokenType + " " + db.token.accessToken)
     }
     fun saveAvaLocally(btmp: Bitmap) {
         val externalStorage = Environment.getExternalStorageState()
@@ -333,7 +345,6 @@ class ProfileFragment : Fragment(), ProfileView {
                 btnSave.visibility = View.INVISIBLE
                 saveOrGetAvaName(newName, 1)
 
-                Toast.makeText(getContext(),"New ava saved ",Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -376,10 +387,15 @@ class ProfileFragment : Fragment(), ProfileView {
             UsernameValue.text = db.userInfo.phone_number
         }else
             UsernameValue.text = db.userInfo.email
-        if(db.userInfo.avatar?.normal?.isNotBlank()!!){
-            setImage(Uri.parse(db.userInfo.avatar?.normal))
-        }
+//        if(db.userInfo.avatar?.normal?.isNotBlank()!!){
+//            setImage(Uri.parse(db.userInfo.avatar?.original))
+//        }
         btnColorDesign()
+        if(db.userInfo.avatar!!.original.isNotEmpty()){
+            setImage(Uri.parse(db.userInfo.avatar!!.original))
+            Log.i("MSG", "curr ava " + db.userInfo.avatar!!.original)
+        }
+
     }
     fun btnColorDesign(){
         if(db.clientInfo.buttonColor?.type=="gradient"){
@@ -397,6 +413,7 @@ class ProfileFragment : Fragment(), ProfileView {
     fun logOut(){
         Toast.makeText(context, "You are Logged Out", Toast.LENGTH_SHORT).show()
         db.haveUserInfo = false
+        db.sid=""
         val i: Intent? = requireActivity().getPackageManager()
             .getLaunchIntentForPackage(requireActivity().getPackageName())
         i!!.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)

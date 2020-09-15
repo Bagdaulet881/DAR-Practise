@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
+import com.example.loginproject.data.interfaces.Contract
 import com.example.loginproject.data.interfaces.RegView
 import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
@@ -27,16 +28,18 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.imageViewReg
 import kotlinx.android.synthetic.main.fragment_verify.*
 import kotlinx.android.synthetic.main.fragment_verify.view.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import java.util.*
 
 
-class VerifyFragment : Fragment() , RegView, ResetView{
-    val presenter = RegPresenter(this)
-    val presenterReset = ResetPresenter(this)
+class VerifyFragment : Fragment() , Contract.RegView, Contract.ResetView{
+    private val presenter: Contract.RegPresenter by inject{ parametersOf(this) }
+    private val presenterReset: Contract.ResetPresenter by inject{ parametersOf(this) }
 
     lateinit var timer: CountDownTimer
     var seconds = 0
-    lateinit var remainingMillis: Any
+     var remainingMillis: Any = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -151,6 +154,12 @@ class VerifyFragment : Fragment() , RegView, ResetView{
         if(type.contains("500")){
             view?.tvError?.text = "Invalid or expired secret code"
         }else
+            if(type.contains("429")){
+                view?.tvError?.text = "Too many requests. Try later!"
+                btnVerify.isClickable = false
+                tvTimer.visibility = View.INVISIBLE
+                timer()
+            }else
         if (type.equals("pvError")){
             view?.tvError?.text = "wrong code try again"
         }else{
