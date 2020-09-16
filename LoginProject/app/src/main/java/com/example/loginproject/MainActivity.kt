@@ -21,18 +21,12 @@ class MainActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 
         super.onRestoreInstanceState(savedInstanceState)
-//        var str = savedInstanceState?.getString("database")
-//        Log.i("MSG", "json " + gson.fromJson(str, Database::class.java))
-//        db = gson.fromJson(str, Database::class.java)
         db.isTimeLeft = savedInstanceState.getBoolean("timeBool")
         db.remainingTime = savedInstanceState.getInt("time")
 
     }
 
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//        val json = gson.toJson(db)
-//        outState.putString("database", json)
-//        Log.i("MSG", "json " + json)
         outState.putInt("time", db.remainingTime)
         outState.putBoolean("timeBool", db.isTimeLeft)
         super.onSaveInstanceState(outState, outPersistentState)

@@ -1,6 +1,5 @@
 package com.example.loginproject.main.register
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -24,10 +23,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.ClientInfo
-import com.example.loginproject.data.presenter.LoginPresenter
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
@@ -72,6 +69,11 @@ class RegisterFragment : Fragment(), Contract.LoginView {
 
         }
     }
+
+    override fun onDestroy() {
+        presenter.destroy()
+        super.onDestroy()
+    }
     fun openWebView(url: String){
         val openURL = Intent(Intent.ACTION_VIEW)
         openURL.data = Uri.parse(url)
@@ -85,7 +87,7 @@ class RegisterFragment : Fragment(), Contract.LoginView {
             }else
                 findNavController().navigate(RegisterFragmentDirections.toVerify())
         }else{
-            tvError.text = "user already exists."
+            tvError.text = "User already exists."
         }
     }
 //------------------------------------------CHANGE DESIGN-------------------------------------------

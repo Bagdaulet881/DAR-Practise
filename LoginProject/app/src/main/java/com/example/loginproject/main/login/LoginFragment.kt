@@ -12,23 +12,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
-import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.network.ClientInfo
-import com.example.loginproject.data.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.fragment_login.*
 import androidx.navigation.fragment.findNavController
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.UserInfo
-import com.example.loginproject.data.presenter.ProfilePresenter
-import com.example.loginproject.main.register.RegisterFragmentDirections
 import kotlinx.android.synthetic.main.fragment_login.btnSignin
 import kotlinx.android.synthetic.main.fragment_login.tvError
 import kotlinx.android.synthetic.main.fragment_login.view.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_register.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 

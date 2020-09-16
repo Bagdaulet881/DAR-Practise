@@ -30,22 +30,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.UserInfo
-import com.example.loginproject.data.presenter.ProfilePresenter
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.fragment_login.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_reset.*
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import java.io.BufferedReader
@@ -78,6 +70,7 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
             Toast.makeText(context, "haveUserInfo false", Toast.LENGTH_SHORT).show()
         }else{
             progressBar2.visibility = View.INVISIBLE
+            tvLoad.visibility = View.INVISIBLE
             btnSave.visibility = View.INVISIBLE
             btnStart.visibility = View.INVISIBLE
             changeDesign()
@@ -237,6 +230,7 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
         activity?.window?.clearFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         progressBar2.visibility = View.GONE
+        tvLoad.visibility = View.INVISIBLE
     }
 
     override fun dataFlowWait() {
@@ -324,6 +318,7 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
             RequestBody.create("image/*".toMediaTypeOrNull(), file)
         )
         progressBar2.visibility = View.VISIBLE
+        tvLoad.visibility = View.VISIBLE
         activity?.window?.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -452,6 +447,9 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
                 if (file.extension == "jpg") {
                     out.add(file.name)
                 }
+            }
+            if(out.isEmpty()){
+                Toast.makeText(context, "You didnt save any avatars", Toast.LENGTH_SHORT).show()
             }
             return out
         } else return out

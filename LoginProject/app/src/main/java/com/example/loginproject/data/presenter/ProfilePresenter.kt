@@ -3,14 +3,11 @@ package com.example.loginproject.data.presenter
 import android.util.Log
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.ProfileView
 import com.example.loginproject.data.interfaces.RepoI
-import com.example.loginproject.data.models.LoginRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 
 class ProfilePresenter(var view: Contract.ProfileView?,
                        val disposable: CompositeDisposable,

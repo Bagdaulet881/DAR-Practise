@@ -3,13 +3,7 @@ package com.example.loginproject.data.presenter
 import android.util.Log
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.RegView
 import com.example.loginproject.data.interfaces.RepoI
-import com.example.loginproject.data.models.LoginRepository
-import com.example.loginproject.data.network.TempToken
-import com.example.loginproject.data.network.TempToken2
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

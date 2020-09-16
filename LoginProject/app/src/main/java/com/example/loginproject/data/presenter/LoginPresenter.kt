@@ -2,9 +2,7 @@ package com.example.loginproject.data.presenter
 
 import android.util.Log
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.LoginView
 import com.example.loginproject.data.interfaces.RepoI
-import com.example.loginproject.data.models.LoginRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

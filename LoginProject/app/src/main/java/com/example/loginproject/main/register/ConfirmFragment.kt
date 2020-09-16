@@ -3,10 +3,6 @@ package com.example.loginproject.main.register
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,16 +19,10 @@ import com.example.loginproject.MainActivity.Companion.db
 
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.ProfileView
-import com.example.loginproject.data.interfaces.RegView
-import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
 import com.example.loginproject.data.network.AvatarInfo
 import com.example.loginproject.data.network.TempToken
 import com.example.loginproject.data.network.UserInfo
-import com.example.loginproject.data.presenter.ProfilePresenter
-import com.example.loginproject.data.presenter.RegPresenter
-import com.example.loginproject.data.presenter.ResetPresenter
 import kotlinx.android.synthetic.main.fragment_confirm.*
 import kotlinx.android.synthetic.main.fragment_confirm.btnNext
 import kotlinx.android.synthetic.main.fragment_confirm.imageViewReg
@@ -134,12 +124,15 @@ class ConfirmFragment : Fragment() , Contract.RegView, Contract.ResetView, Contr
 
     override fun onDestroy() {
         presenter.destroy()
+        presenterProfile.destroy()
+        presenterReset.destroy()
         super.onDestroy()
     }
     fun checkForPassword(p1:String,p2:String):Boolean{
         return p1.equals(p2)
     }
 
+//-------------------------------------REGISTRATION VIEW--------------------------------------------
 
     override fun signUp(token: AccessToken) {
         db.token = token
@@ -159,6 +152,7 @@ class ConfirmFragment : Fragment() , Contract.RegView, Contract.ResetView, Contr
         Log.i("MSG", "Phone Number registered w/ password token-> " + token)
 //      no needed
     }
+//-------------------------------------RESET VIEW--------------------------------------------
 
     override fun response(str: String) {
         if (str == "updated"){
@@ -169,6 +163,7 @@ class ConfirmFragment : Fragment() , Contract.RegView, Contract.ResetView, Contr
             findNavController().navigate(ConfirmFragmentDirections.toLogin())
         }
     }
+//-------------------------------------PROFILE VIEW--------------------------------------------
 
     override fun userResponse(userInfo: UserInfo) {
         db.userInfo = userInfo

@@ -16,15 +16,8 @@ import com.example.loginproject.MainActivity
 import com.example.loginproject.MainActivity.Companion.db
 import com.example.loginproject.R
 import com.example.loginproject.data.interfaces.Contract
-import com.example.loginproject.data.interfaces.RegView
-import com.example.loginproject.data.interfaces.ResetView
 import com.example.loginproject.data.network.AccessToken
-import com.example.loginproject.data.network.SmsCodeRequestBody
 import com.example.loginproject.data.network.TempToken
-import com.example.loginproject.data.presenter.RegPresenter
-import com.example.loginproject.data.presenter.ResetPresenter
-import io.reactivex.Completable
-import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.imageViewReg
 import kotlinx.android.synthetic.main.fragment_verify.*
 import kotlinx.android.synthetic.main.fragment_verify.view.*
@@ -111,7 +104,7 @@ class VerifyFragment : Fragment() , Contract.RegView, Contract.ResetView{
                 presenter.verifyCode(sid, code)
             }
     }
-
+//-------------------------------------REGISTRATION VIEW--------------------------------------------
     override fun signUp(token: AccessToken) {
         Log.i("MSG", "signUp SID " + token)
     }
@@ -128,7 +121,9 @@ class VerifyFragment : Fragment() , Contract.RegView, Contract.ResetView{
     override fun registerWithPassword(token: AccessToken) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-//this response for reset pwd
+//-------------------------------------RESET VIEW---------------------------------------------------
+
+    //this response for reset pwd
     override fun response(str:String) {
 
         if(str == "verified"){
@@ -161,7 +156,7 @@ class VerifyFragment : Fragment() , Contract.RegView, Contract.ResetView{
                 timer()
             }else
         if (type.equals("pvError")){
-            view?.tvError?.text = "wrong code try again"
+            view?.tvError?.text = "Wrong code try again"
         }else{
             view?.tvError?.text = type
         }
