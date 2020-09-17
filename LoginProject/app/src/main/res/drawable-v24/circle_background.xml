@@ -5,9 +5,14 @@
     android:shape="ring"
     android:thickness="6dp"
     android:useLevel="false">
-    <solid
-        android:color="#539174">
-    </solid>
+    <gradient android:endColor="#ff0000"
+        android:centerColor="#07EF83"
+        android:startColor="#ff0000"
+        android:type="sweep"
+        android:useLevel="false"/>
+<!--    <solid-->
+<!--        android:color="#539174">-->
+<!--    </solid>-->
     <size
         android:height="207dp"
         android:width="207dp">

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -74,9 +75,10 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
             btnSave.visibility = View.INVISIBLE
             btnStart.visibility = View.INVISIBLE
             changeDesign()
-//            TODO start invisible
         }
         btnStart.setOnClickListener{
+            btnStart.background = resources.getDrawable(R.drawable.start2_button)
+            btnStart.setTextColor(resources.getColor(R.color.red2))
             findNavController().navigate(ProfileFragmentDirections.toLogin())
         }
         btnLogout.setOnClickListener{
@@ -398,6 +400,7 @@ class ProfileFragment : Fragment(), Contract.ProfileView {
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 db.clientInfo.buttonColor!!.colors.filter { it.isNotBlank() }.map { Color.parseColor(it) }.toIntArray()
             )
+            gradientDrawable.cornerRadius = 5.0F
             btnChangePwd.background = gradientDrawable
             btnSave.background = gradientDrawable
         }else{
