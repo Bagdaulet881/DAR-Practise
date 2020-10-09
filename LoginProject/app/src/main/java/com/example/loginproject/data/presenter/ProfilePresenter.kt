@@ -24,8 +24,6 @@ class ProfilePresenter(var view: Contract.ProfileView?,
                 Log.i("MSG", "userInfo true")
                 db.haveUserInfo = true
                 view?.userResponse(userInfo)
-
-
             },{
                 it.printStackTrace()
                 view?.handleError(it.message!!)

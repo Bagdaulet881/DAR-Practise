@@ -17,7 +17,6 @@ val dataModule = module {
     factory<RepoI> { LoginRepository(get()) }
     factory<RemoteI> { LoginRemoteDataSource(get()) }
     single { generateApiService() }
-
 }
 private fun generateApiService() : ApiService {
     Log.i("MSG", "generateApiService check")

@@ -35,7 +35,7 @@ class LoginPresenter(var view: Contract.LoginView?,
             },{
                 it.printStackTrace()
                 view?.handleError(it.message!!)
-                Log.i("MSG", "logged false")
+                Log.i("MSG", "logged false" + it)
 
             })
         disposable.add(info)
