@@ -1,4 +1,5 @@
 # DAR-Practise
 FINAL LoginProject APP Screenshots!
 
-![loginpage](./loginpage1.png)
+
+<img src="./loginpage1.png" alt="drawing" width="200" height="250"/>
