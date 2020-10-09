@@ -2,4 +2,4 @@
 FINAL LoginProject APP Screenshots!
 
 
-<img src="./loginpage1.png" alt="drawing" width="200" height="250"/>
+<img src="./loginpage1.png" alt="drawing" width="200" height="400"/>
